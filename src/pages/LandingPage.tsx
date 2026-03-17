@@ -1,0 +1,215 @@
+import { Link } from 'react-router-dom'
+import {
+  CalendarCheck,
+  Users,
+  Scissors,
+  TrendingUp,
+  ArrowRight,
+  Sparkles,
+  CheckCircle2,
+} from 'lucide-react'
+import { ROUTES, APP_NAME } from '@/utils/constants'
+
+const features = [
+  {
+    icon: CalendarCheck,
+    title: 'Agendamento Online',
+    description: 'Seus clientes agendam horários 24h pelo celular. Sem ligações, sem confusão.',
+  },
+  {
+    icon: Users,
+    title: 'Gestão de Clientes',
+    description: 'Cadastro completo com histórico de atendimentos e preferências.',
+  },
+  {
+    icon: Scissors,
+    title: 'Catálogo de Serviços',
+    description: 'Organize seus serviços com preços, duração e disponibilidade.',
+  },
+  {
+    icon: TrendingUp,
+    title: 'Relatórios Financeiros',
+    description: 'Acompanhe seu faturamento, comissões e métricas importantes.',
+  },
+]
+
+const plans = [
+  {
+    name: 'Gratuito',
+    price: 'R$ 0',
+    period: '/mês',
+    features: ['50 clientes', '10 serviços', '100 agendamentos/mês', 'Suporte por email'],
+    highlight: false,
+  },
+  {
+    name: 'Profissional',
+    price: 'R$ 79',
+    period: '/mês',
+    features: ['Clientes ilimitados', 'Serviços ilimitados', 'Agendamentos ilimitados', 'Relatórios avançados', 'Suporte prioritário'],
+    highlight: true,
+  },
+  {
+    name: 'Enterprise',
+    price: 'R$ 149',
+    period: '/mês',
+    features: ['Tudo do Profissional', 'Múltiplas unidades', 'API personalizada', 'Gerente de conta dedicado'],
+    highlight: false,
+  },
+]
+
+export function LandingPage() {
+  return (
+    <div className="min-h-screen bg-dark-950 text-white overflow-x-hidden">
+      {/* Navbar */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-dark-950/80 backdrop-blur-xl border-b border-dark-700/30">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
+              <Sparkles className="w-5 h-5 text-dark-950" />
+            </div>
+            <span className="text-lg font-bold tracking-tight">{APP_NAME}</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link to={ROUTES.LOGIN} className="text-sm text-dark-300 hover:text-white transition-colors">
+              Entrar
+            </Link>
+            <Link to={ROUTES.REGISTER} className="btn-primary text-sm">
+              Começar grátis
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero */}
+      <section className="relative pt-32 pb-20 px-6">
+        {/* Background glows */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 left-1/4 w-96 h-96 bg-primary-500/5 rounded-full blur-[120px]" />
+          <div className="absolute bottom-20 right-1/4 w-80 h-80 bg-primary-400/5 rounded-full blur-[100px]" />
+        </div>
+
+        <div className="relative max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-400 text-sm font-medium mb-8 animate-fade-in">
+            <Sparkles className="w-4 h-4" />
+            Sistema #1 para barbearias
+          </div>
+
+          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-6 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+            Sua barbearia no{' '}
+            <span className="bg-gradient-to-r from-primary-400 to-primary-200 bg-clip-text text-transparent">
+              próximo nível
+            </span>
+          </h1>
+
+          <p className="text-lg md:text-xl text-dark-300 max-w-2xl mx-auto mb-10 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            Automatize agendamentos, gerencie clientes e acompanhe seu faturamento.
+            Tudo em um só lugar, simples e profissional.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+            <Link to={ROUTES.REGISTER} className="btn-primary text-base px-8 py-3">
+              Começar gratuitamente
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+            <Link
+              to={ROUTES.LOGIN}
+              className="btn-secondary text-base px-8 py-3"
+            >
+              Já tenho conta
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Tudo que você precisa</h2>
+            <p className="text-dark-300 text-lg">Ferramentas profissionais para gerenciar sua barbearia</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {features.map((feature, index) => (
+              <div
+                key={feature.title}
+                className="glass-card p-8 animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="w-12 h-12 rounded-xl bg-primary-500/10 flex items-center justify-center mb-4">
+                  <feature.icon className="w-6 h-6 text-primary-400" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+                <p className="text-dark-300">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Planos acessíveis</h2>
+            <p className="text-dark-300 text-lg">Escolha o plano ideal para o tamanho do seu negócio</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {plans.map((plan) => (
+              <div
+                key={plan.name}
+                className={`glass-card p-8 flex flex-col ${
+                  plan.highlight
+                    ? 'border-primary-500/30 shadow-lg shadow-primary-500/5 relative'
+                    : ''
+                }`}
+              >
+                {plan.highlight && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-primary-500 text-dark-950 text-xs font-bold">
+                    Mais popular
+                  </div>
+                )}
+                <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
+                <div className="flex items-baseline gap-1 mb-6">
+                  <span className="text-4xl font-extrabold text-white">{plan.price}</span>
+                  <span className="text-dark-400">{plan.period}</span>
+                </div>
+                <ul className="space-y-3 mb-8 flex-1">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="flex items-center gap-3 text-sm text-dark-200">
+                      <CheckCircle2 className="w-4 h-4 text-primary-400 flex-shrink-0" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  to={ROUTES.REGISTER}
+                  className={plan.highlight ? 'btn-primary justify-center' : 'btn-secondary justify-center'}
+                >
+                  Começar agora
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 px-6 border-t border-dark-700/30">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-dark-950" />
+            </div>
+            <span className="font-bold">{APP_NAME}</span>
+          </div>
+          <p className="text-sm text-dark-400">
+            © {new Date().getFullYear()} {APP_NAME}. Todos os direitos reservados.
+          </p>
+        </div>
+      </footer>
+    </div>
+  )
+}
