@@ -3,13 +3,32 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || ''
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || ''
 
-if (!supabaseUrl || !supabaseAnonKey) {
+// Helper to validate URL
+const isValidUrl = (url: string) => {
+  try {
+    new URL(url);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+const finalUrl = isValidUrl(supabaseUrl) 
+  ? supabaseUrl 
+  : 'https://placeholder.supabase.co';
+
+if (!supabaseUrl || !supabaseAnonKey || !isValidUrl(supabaseUrl)) {
   console.warn(
-    '⚠️ Missing Supabase environment variables. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file.'
+    '⚠️ Supabase configuration issue. Please check your .env file.',
+    { 
+      hasUrl: !!supabaseUrl, 
+      hasKey: !!supabaseAnonKey, 
+      isValidUrl: isValidUrl(supabaseUrl) 
+    }
   )
 }
 
 export const supabase = createClient(
-  supabaseUrl || 'https://placeholder.supabase.co',
+  finalUrl,
   supabaseAnonKey || 'placeholder-key'
 )

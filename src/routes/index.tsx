@@ -12,6 +12,7 @@ import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage'
 
 // Private Module Pages
 import { DashboardPage } from '@/modules/dashboard/DashboardPage'
+import OnboardingPage from '@/pages/OnboardingPage'
 import { ServicesPage } from '@/modules/services/ServicesPage'
 import { ClientsPage } from '@/modules/clients/ClientsPage'
 import { AppointmentsPage } from '@/modules/appointments/AppointmentsPage'
@@ -48,6 +49,10 @@ export const router = createBrowserRouter([
       {
         path: '/dashboard',
         element: <DashboardPage />,
+      },
+      {
+        path: '/onboarding',
+        element: <OnboardingPage />,
       },
       {
         path: '/services',

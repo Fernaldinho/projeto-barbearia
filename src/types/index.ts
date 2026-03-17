@@ -128,6 +128,27 @@ export interface Invoice {
 export type InvoiceStatus = 'pending' | 'paid' | 'overdue' | 'cancelled'
 
 // ============================================
+// Business Hours & Availability
+// ============================================
+export interface BusinessHours {
+  id: string
+  company_id: string
+  weekday: number // 0-6
+  start_time: string
+  end_time: string
+}
+
+export interface BlockedTime {
+  id: string
+  company_id: string
+  date: string
+  start_time: string
+  end_time: string
+  reason: string | null
+  created_at: string
+}
+
+// ============================================
 // Dashboard Types
 // ============================================
 export interface DashboardStats {
@@ -136,3 +157,4 @@ export interface DashboardStats {
   appointmentsToday: number
   monthlyRevenue: number
 }
+

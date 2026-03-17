@@ -45,10 +45,23 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
     }
 
     try {
+      // First get the user profile to find the company_id
+      const { data: profile, error: profileError } = await supabase
+        .from('users')
+        .select('company_id')
+        .eq('id', user.id)
+        .single()
+
+      if (profileError || !profile?.company_id) {
+        setCompany(null)
+        setLoading(false)
+        return
+      }
+
       const { data, error } = await supabase
         .from('companies')
         .select('*')
-        .eq('owner_id', user.id)
+        .eq('id', profile.company_id)
         .single()
 
       if (error) {

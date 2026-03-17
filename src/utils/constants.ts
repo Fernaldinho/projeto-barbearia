@@ -15,6 +15,7 @@ export const ROUTES = {
   APPOINTMENTS: '/appointments',
   SETTINGS: '/settings',
   BILLING: '/billing',
+  ONBOARDING: '/onboarding',
 } as const
 
 export const PLANS = {

@@ -51,3 +51,31 @@ export function getInitials(name: string): string {
 export function cn(...classes: (string | undefined | null | false)[]): string {
   return classes.filter(Boolean).join(' ')
 }
+
+/**
+ * Generates a URL-safe slug from a string
+ */
+export function generateSlug(text: string): string {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .normalize('NFD') // remove accents
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '-') // replace spaces with -
+    .replace(/[^\w-]+/g, '') // remove non-word chars
+    .replace(/--+/g, '-') // replace multiple - with single -
+}
+
+/**
+ * Basic phone formatter (BR style)
+ */
+export function formatPhone(value: string): string {
+  if (!value) return ''
+  const phone = value.replace(/\D/g, '')
+  if (phone.length <= 10) {
+    return phone.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3')
+  }
+  return phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
+}
+
