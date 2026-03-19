@@ -13,6 +13,7 @@ export const ROUTES = {
   SERVICES: '/services',
   CLIENTS: '/clients',
   APPOINTMENTS: '/appointments',
+  BUSINESS_HOURS: '/business-hours',
   SETTINGS: '/settings',
   BILLING: '/billing',
   ONBOARDING: '/onboarding',
