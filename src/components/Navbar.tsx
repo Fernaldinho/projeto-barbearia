@@ -27,7 +27,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
   const pageTitle = routeTitles[location.pathname] || 'Dashboard'
 
   return (
-    <header className="fixed top-0 right-0 z-30 h-[64px] bg-dark-950/80 backdrop-blur-lg border-b border-dark-800 left-0 md:left-[240px] transition-all">
+    <header style={{ backgroundColor: '#121212', borderBottom: '1px solid #262626' }} className="fixed top-0 right-0 z-30 h-[64px] backdrop-blur-lg left-0 md:left-[240px] transition-all">
       <div className="flex items-center justify-between h-full px-[24px]">
         
         {/* Left side: Mobile Hamburger + Title */}
@@ -39,14 +39,14 @@ export function Navbar({ onMenuClick }: NavbarProps) {
             <Menu className="w-5 h-5" />
           </button>
           
-          <h2 className="!mb-0 whitespace-nowrap">{pageTitle}</h2>
+          <h2 className="!mb-0 whitespace-nowrap" style={{ fontFamily: "'Bebas Neue', 'Inter', sans-serif", textTransform: 'uppercase', letterSpacing: '0.04em', fontSize: '22px', fontWeight: 400, color: '#f2f2f2' }}>{pageTitle}</h2>
         </div>
 
         {/* Right side: Actions & User Info */}
         <div className="flex items-center gap-[16px] shrink-0">
           <button className="relative p-2 rounded-lg text-dark-400 hover:bg-dark-800 hover:text-white transition-all">
             <Bell className="w-5 h-5" />
-            <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-primary-500 rounded-full" />
+            <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#e7b008' }} />
           </button>
 
           <div className="flex items-center gap-[8px] pl-[16px] border-l border-dark-800">
@@ -54,8 +54,8 @@ export function Navbar({ onMenuClick }: NavbarProps) {
               <p className="text-small font-medium text-white mb-0.5">{userName}</p>
               <p className="text-[10px] text-dark-400 leading-none">Admin</p>
             </div>
-            <div className="w-8 h-8 rounded-lg bg-dark-800 border border-dark-700 flex items-center justify-center">
-              <span className="text-xs font-semibold text-primary-400">{getInitials(userName)}</span>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#1a1a1a', border: '1px solid #333333' }}>
+              <span className="text-xs font-semibold" style={{ color: '#e7b008' }}>{getInitials(userName)}</span>
             </div>
           </div>
         </div>

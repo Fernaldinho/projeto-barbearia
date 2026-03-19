@@ -41,14 +41,15 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <aside 
       className={cn(
-        "fixed left-0 top-0 z-40 h-screen w-[240px] flex flex-col bg-dark-900 border-r border-dark-800 transition-transform duration-300 md:translate-x-0",
+        "fixed left-0 top-0 z-40 h-screen w-[240px] flex flex-col transition-transform duration-300 md:translate-x-0",
         isOpen ? "translate-x-0" : "-translate-x-full"
       )}
+      style={{ backgroundColor: '#141414', borderRight: '1px solid #262626' }}
     >
       {/* Logo & Close Button (Mobile) */}
-      <div className="flex items-center justify-between px-[16px] h-[64px] shrink-0 border-b border-dark-800">
+      <div className="flex items-center justify-between px-[16px] h-[64px] shrink-0" style={{ borderBottom: '1px solid #262626' }}>
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)' }}>
             <Sparkles className="w-4 h-4 text-dark-950" />
           </div>
           <span className="text-base font-semibold text-white tracking-tight">{APP_NAME}</span>
@@ -73,13 +74,17 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               onClick={() => {
                 if (window.innerWidth < 768) onClose()
               }}
-              className={cn('nav-item', isActive && 'active')}
+              className={cn(
+                'nav-item',
+                isActive && 'active'
+              )}
+              style={isActive ? { background: '#1f1f1f', color: '#e7b008', borderRadius: '8px', borderLeft: 'none' } : {}}
             >
               <item.icon
                 className={cn(
-                  'w-4 h-4 transition-colors shrink-0',
-                  isActive ? 'text-primary-500' : 'text-dark-500'
+                  'w-4 h-4 transition-colors shrink-0'
                 )}
+                style={{ color: isActive ? '#e7b008' : '#666666' }}
               />
               {item.label}
             </NavLink>
@@ -88,7 +93,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       </nav>
 
       {/* Logout */}
-      <div className="p-[16px] shrink-0 border-t border-dark-800">
+      <div className="p-[16px] shrink-0" style={{ borderTop: '1px solid #262626' }}>
         <button
           onClick={logout}
           className="nav-item w-full"
