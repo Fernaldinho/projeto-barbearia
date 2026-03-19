@@ -16,7 +16,7 @@ interface TodayScheduleProps {
 
 export function TodaySchedule({ appointments }: TodayScheduleProps) {
   return (
-    <div className="glass-card p-5">
+    <div className="card p-5">
       <div className="flex items-center gap-3 mb-4">
         <div className="w-9 h-9 rounded-xl bg-primary-500/10 flex items-center justify-center">
           <CalendarCheck className="w-4 h-4 text-primary-400" />

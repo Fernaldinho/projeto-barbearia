@@ -127,7 +127,7 @@ export function BusinessHoursPage() {
           <h1 className="text-3xl font-bold text-white">Horário de Funcionamento</h1>
           <p className="text-dark-300 mt-1">Defina os dias e horários de atendimento</p>
         </div>
-        <div className="glass-card p-8 text-center">
+        <div className="card p-8 text-center">
           <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto" />
         </div>
       </div>
@@ -173,7 +173,7 @@ export function BusinessHoursPage() {
         {days.map((day) => (
           <div
             key={day.weekday}
-            className={`glass-card p-4 sm:p-5 transition-all duration-300 ${
+            className={`card p-4 sm:p-5 transition-all duration-300 ${
               day.enabled
                 ? 'border-primary-500/20 shadow-lg shadow-primary-500/5'
                 : 'opacity-60'
@@ -258,7 +258,7 @@ export function BusinessHoursPage() {
       </div>
 
       {/* Info Card */}
-      <div className="glass-card p-4 border-dark-700/30">
+      <div className="card p-4 border-dark-700/30">
         <div className="flex items-start gap-3">
           <div className="w-8 h-8 rounded-lg bg-primary-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
             <Clock className="w-4 h-4 text-primary-400" />

@@ -63,7 +63,7 @@ export function StatsCards({ metrics }: StatsCardsProps) {
         const value = metrics[card.key] as number
 
         return (
-          <div key={card.key} className={cn('glass-card p-5 shadow-lg', colors.glow)}>
+          <div key={card.key} className={cn('card p-5 shadow-lg', colors.glow)}>
             <div className="flex items-center justify-between mb-3">
               <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center', colors.bg)}>
                 <Icon className={cn('w-5 h-5', colors.text)} />

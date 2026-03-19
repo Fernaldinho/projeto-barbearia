@@ -30,12 +30,12 @@ export function StaffForm({ initialData, onSubmit, onClose }: StaffFormProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
-      <div className="glass-card w-full max-w-md p-6 mx-4 animate-scale-in">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-white">
+      <div className="card w-full max-w-md p-0 flex flex-col overflow-hidden mx-4 animate-scale-in">
+        <div className="flex items-center justify-between p-6 border-b border-dark-800">
+          <h2 className="!mb-0">
             {initialData ? 'Editar Profissional' : 'Novo Profissional'}
           </h2>
-          <button onClick={onClose} className="p-2 rounded-lg text-dark-400 hover:bg-dark-700 hover:text-white transition-all">
+          <button onClick={onClose} className="p-2 -mr-2 rounded-lg text-dark-400 hover:bg-dark-800 hover:text-white transition-all">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -47,20 +47,20 @@ export function StaffForm({ initialData, onSubmit, onClose }: StaffFormProps) {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div>
-            <label htmlFor="staff-name" className="block text-sm font-medium text-dark-200 mb-2">Nome *</label>
+            <label htmlFor="staff-name">Nome *</label>
             <input id="staff-name" type="text" value={name} onChange={(e) => setName(e.target.value)}
               placeholder="Nome do profissional" className="input-field" required />
           </div>
           <div>
-            <label htmlFor="staff-role" className="block text-sm font-medium text-dark-200 mb-2">Cargo / Função</label>
+            <label htmlFor="staff-role">Cargo / Função</label>
             <input id="staff-role" type="text" value={role} onChange={(e) => setRole(e.target.value)}
               placeholder="Ex: Barbeiro, Cabeleireiro..." className="input-field" />
           </div>
-          <div className="flex gap-3 pt-2">
-            <button type="button" onClick={onClose} className="btn-secondary flex-1 justify-center">Cancelar</button>
-            <button type="submit" disabled={loading} className="btn-primary flex-1 justify-center disabled:opacity-50">
+          <div className="flex justify-end gap-3 pt-6 mt-2 border-t border-dark-800">
+            <button type="button" onClick={onClose} className="btn-secondary">Cancelar</button>
+            <button type="submit" disabled={loading} className="btn-primary">
               {loading ? 'Salvando...' : initialData ? 'Salvar' : 'Adicionar'}
             </button>
           </div>

@@ -69,7 +69,7 @@ export function ServicesPage() {
 
       {/* Content */}
       {loading ? (
-        <div className="glass-card p-8 text-center">
+        <div className="card p-8 text-center">
           <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto" />
         </div>
       ) : (

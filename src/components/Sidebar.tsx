@@ -11,6 +11,7 @@ import {
   CreditCard,
   LogOut,
   Sparkles,
+  X
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { ROUTES, APP_NAME } from '@/utils/constants'
@@ -28,57 +29,76 @@ const navItems = [
   { path: ROUTES.SETTINGS, label: 'Configurações', icon: Settings },
 ]
 
-export function Sidebar() {
+interface SidebarProps {
+  isOpen: boolean
+  onClose: () => void
+}
+
+export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const { logout } = useAuth()
   const location = useLocation()
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-[260px] flex flex-col bg-dark-900 border-r border-dark-700/50">
-      {/* Logo */}
-      <div className="flex items-center gap-3 px-6 h-[64px] border-b border-dark-700/50">
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
-          <Sparkles className="w-5 h-5 text-dark-950" />
+    <aside 
+      className={cn(
+        "fixed left-0 top-0 z-40 h-screen w-[260px] flex flex-col bg-dark-900 border-r border-dark-800 transition-transform duration-300 md:translate-x-0",
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      )}
+    >
+      {/* Logo & Close Button (Mobile) */}
+      <div className="flex items-center justify-between px-6 h-[64px] border-b border-dark-800">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
+            <Sparkles className="w-4 h-4 text-dark-950" />
+          </div>
+          <span className="text-base font-semibold text-white tracking-tight">{APP_NAME}</span>
         </div>
-        <span className="text-lg font-bold text-white tracking-tight">{APP_NAME}</span>
+        
+        <button 
+          onClick={onClose}
+          className="md:hidden p-2 -mr-2 text-dark-400 hover:text-white rounded-lg transition-colors"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 px-3 py-5 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = location.pathname === item.path
           return (
             <NavLink
               key={item.path}
               to={item.path}
+              onClick={() => {
+                if (window.innerWidth < 768) onClose()
+              }}
               className={cn(
-                'flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200',
+                'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200',
                 isActive
-                  ? 'bg-primary-500/10 text-primary-400 shadow-sm'
-                  : 'text-dark-300 hover:bg-dark-800 hover:text-white'
+                  ? 'bg-dark-800 text-white'
+                  : 'text-dark-400 hover:bg-dark-800/50 hover:text-dark-200'
               )}
             >
               <item.icon
                 className={cn(
-                  'w-5 h-5 transition-colors',
-                  isActive ? 'text-primary-400' : 'text-dark-400'
+                  'w-4 h-4 transition-colors',
+                  isActive ? 'text-primary-400' : 'text-dark-500 group-hover:text-dark-400'
                 )}
               />
               {item.label}
-              {isActive && (
-                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary-400" />
-              )}
             </NavLink>
           )
         })}
       </nav>
 
       {/* Logout */}
-      <div className="px-3 py-4 border-t border-dark-700/50">
+      <div className="p-4 border-t border-dark-800">
         <button
           onClick={logout}
-          className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium text-dark-400 hover:bg-danger-600/10 hover:text-danger-500 transition-all duration-200"
+          className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium text-dark-400 hover:bg-dark-800 hover:text-dark-200 transition-all duration-200"
         >
-          <LogOut className="w-5 h-5" />
+          <LogOut className="w-4 h-4 text-dark-500" />
           Sair
         </button>
       </div>

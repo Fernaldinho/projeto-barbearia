@@ -55,7 +55,7 @@ export function AppointmentCalendar({
   )
 
   return (
-    <div className="glass-card overflow-hidden">
+    <div className="card overflow-hidden">
       <div className="flex">
         {/* Time labels column */}
         <div className="flex-shrink-0 w-16 border-r border-dark-700/30">

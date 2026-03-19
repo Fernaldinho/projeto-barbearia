@@ -19,7 +19,7 @@ const statusConfig: Record<string, { label: string; color: string; icon: any }> 
 export function AppointmentsList({ appointments, onStatusChange, onEdit }: AppointmentsListProps) {
   if (appointments.length === 0) {
     return (
-      <div className="glass-card p-12 text-center">
+      <div className="card p-12 text-center">
         <p className="text-dark-400 text-lg mb-2">Nenhum agendamento</p>
         <p className="text-dark-500 text-sm">Não há agendamentos para a data selecionada.</p>
       </div>
@@ -37,7 +37,7 @@ export function AppointmentsList({ appointments, onStatusChange, onEdit }: Appoi
           <div
             key={appointment.id}
             className={cn(
-              'glass-card p-5 flex items-center gap-4 transition-all',
+              'card p-5 flex items-center gap-4 transition-all',
               !isActive && 'opacity-60'
             )}
           >

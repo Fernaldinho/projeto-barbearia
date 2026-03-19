@@ -11,7 +11,7 @@ interface ClientsTableProps {
 export function ClientsTable({ clients, onEdit, onDelete }: ClientsTableProps) {
   if (clients.length === 0) {
     return (
-      <div className="glass-card p-12 text-center">
+      <div className="card p-12 text-center">
         <p className="text-dark-400 text-lg mb-2">Nenhum cliente cadastrado</p>
         <p className="text-dark-500 text-sm">Adicione seu primeiro cliente para começar.</p>
       </div>
@@ -19,11 +19,11 @@ export function ClientsTable({ clients, onEdit, onDelete }: ClientsTableProps) {
   }
 
   return (
-    <div className="glass-card overflow-hidden">
+    <div className="table-container">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-dark-700/50">
+            <tr className="border-b border-dark-700 bg-dark-900">
               <th className="text-left text-xs font-semibold text-dark-400 uppercase tracking-wider px-6 py-4">Cliente</th>
               <th className="text-left text-xs font-semibold text-dark-400 uppercase tracking-wider px-6 py-4">Contato</th>
               <th className="text-left text-xs font-semibold text-dark-400 uppercase tracking-wider px-6 py-4">Observações</th>
@@ -31,11 +31,14 @@ export function ClientsTable({ clients, onEdit, onDelete }: ClientsTableProps) {
             </tr>
           </thead>
           <tbody>
-            {clients.map((client) => (
-              <tr key={client.id} className="border-b border-dark-700/30 hover:bg-dark-800/50 transition-colors">
+            {clients.map((client, index) => (
+              <tr 
+                key={client.id} 
+                className={`border-b border-dark-700/50 hover:bg-dark-700/30 transition-colors ${index % 2 === 0 ? 'bg-dark-800' : 'bg-dark-800/80'}`}
+              >
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500/20 to-primary-700/20 border border-primary-500/10 flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-dark-900 border border-dark-700 flex items-center justify-center flex-shrink-0">
                       <span className="text-xs font-bold text-primary-400">{getInitials(client.name)}</span>
                     </div>
                     <span className="font-medium text-white">{client.name}</span>
@@ -44,27 +47,37 @@ export function ClientsTable({ clients, onEdit, onDelete }: ClientsTableProps) {
                 <td className="px-6 py-4">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 text-sm text-dark-200">
-                      <Phone className="w-3.5 h-3.5 text-dark-400" />
+                      <Phone className="w-3.5 h-3.5 text-dark-500" />
                       {client.phone}
                     </div>
                     {client.email && (
-                      <div className="flex items-center gap-2 text-sm text-dark-300">
-                        <Mail className="w-3.5 h-3.5 text-dark-400" />
+                      <div className="flex items-center gap-2 text-sm text-dark-400">
+                        <Mail className="w-3.5 h-3.5 text-dark-500" />
                         {client.email}
                       </div>
                     )}
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <span className="text-sm text-dark-400">{client.notes || '-'}</span>
+                  <span className="text-sm text-dark-400 max-w-[200px] truncate block" title={client.notes || ''}>
+                    {client.notes || '-'}
+                  </span>
                 </td>
                 <td className="px-6 py-4 text-right">
-                  <div className="flex items-center justify-end gap-2">
-                    <button onClick={() => onEdit(client)} className="p-2 rounded-lg text-dark-400 hover:bg-dark-700 hover:text-white transition-all">
+                  <div className="flex items-center justify-end gap-3">
+                    <button
+                      onClick={() => onEdit(client)}
+                      className="text-dark-400 hover:text-white transition-colors flex items-center gap-1.5 text-sm"
+                    >
                       <Edit className="w-4 h-4" />
+                      <span className="hidden sm:inline">Editar</span>
                     </button>
-                    <button onClick={() => onDelete(client.id)} className="p-2 rounded-lg text-dark-400 hover:bg-danger-600/10 hover:text-danger-500 transition-all">
+                    <button
+                      onClick={() => onDelete(client.id)}
+                      className="text-dark-400 hover:text-danger-500 transition-colors flex items-center gap-1.5 text-sm ml-2"
+                    >
                       <Trash2 className="w-4 h-4" />
+                      <span className="hidden sm:inline">Excluir</span>
                     </button>
                   </div>
                 </td>

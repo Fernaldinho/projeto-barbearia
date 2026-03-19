@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 /* ============================================ */
-/* Design System - BarberPro Dark Theme         */
+/* Design System - Modern SaaS Dark Theme       */
 /* ============================================ */
 
 @theme {
-  /* Primary Yellow */
+  /* Primary Color (Amber/Yellow) */
   --color-primary-50: #fefce8;
   --color-primary-100: #fef9c3;
   --color-primary-200: #fef08a;
@@ -17,37 +17,33 @@
   --color-primary-800: #854d0e;
   --color-primary-900: #713f12;
 
-  /* Dark backgrounds */
-  --color-dark-950: #0a0a0f;
-  --color-dark-900: #0f0f17;
-  --color-dark-800: #151521;
-  --color-dark-700: #1c1c2e;
-  --color-dark-600: #25253a;
-  --color-dark-500: #32324d;
-  --color-dark-400: #52527a;
-  --color-dark-300: #7272a3;
-  --color-dark-200: #9e9ec8;
-  --color-dark-100: #c4c4e0;
+  /* Neutral/Cool Gray Backgrounds */
+  --color-dark-950: #09090b; /* Page Background */
+  --color-dark-900: #121214; /* Sidebar/Navbar */
+  --color-dark-800: #18181b; /* Cards */
+  --color-dark-700: #27272a; /* Borders / Hover */
+  --color-dark-600: #3f3f46; /* Input borders */
+  --color-dark-500: #52525b; /* Muted text */
+  --color-dark-400: #71717a; /* Secondary text */
+  --color-dark-300: #a1a1aa; /* Normal text */
+  --color-dark-200: #d4d4d8;
+  --color-dark-100: #f4f4f5; /* Headings */
 
-  /* Danger */
+  /* Semantic */
   --color-danger-500: #ef4444;
   --color-danger-600: #dc2626;
-
-  /* Success */
   --color-success-500: #22c55e;
   --color-success-600: #16a34a;
-
-  /* Info */
   --color-info-500: #3b82f6;
   --color-info-600: #2563eb;
 
-  /* Spacing */
+  /* Spacing Variables */
   --spacing-sidebar: 260px;
   --spacing-navbar: 64px;
 }
 
 /* ============================================ */
-/* Base Styles                                  */
+/* Base Styles & Typography                     */
 /* ============================================ */
 
 * {
@@ -57,11 +53,50 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background-color: var(--color-dark-950);
-  color: var(--color-dark-100);
+  color: var(--color-dark-300);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+h1 {
+  font-size: 1.5rem; /* 24px */
+  font-weight: 600;
+  color: var(--color-dark-100);
+  letter-spacing: -0.025em;
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 1.125rem; /* 18px */
+  font-weight: 600;
+  color: var(--color-dark-100);
+  letter-spacing: -0.015em;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 0.875rem; /* 14px */
+  font-weight: 600;
+  color: var(--color-dark-100);
+  margin-bottom: 0.5rem;
+}
+
+p {
+  font-size: 0.875rem; /* 14px */
+  color: var(--color-dark-300);
+}
+
+label {
+  display: block;
+  font-size: 0.75rem; /* 12px */
+  font-weight: 600;
+  color: var(--color-dark-300);
+  margin-bottom: 0.375rem; /* 6px */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 /* ============================================ */
@@ -74,11 +109,11 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-dark-900);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-dark-600);
+  background: var(--color-dark-700);
   border-radius: 3px;
 }
 
@@ -87,114 +122,157 @@ body {
 }
 
 /* ============================================ */
-/* Utility Classes                              */
+/* Layout & Structural Utilities                */
 /* ============================================ */
 
-.glass {
-  background: rgba(15, 15, 23, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-.glass-card {
-  background: linear-gradient(135deg, rgba(21, 21, 33, 0.8), rgba(28, 28, 46, 0.4));
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.glass-card:hover {
-  border-color: rgba(250, 204, 21, 0.15);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  transform: translateY(-2px);
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-400));
-  color: var(--color-dark-950);
-  font-weight: 600;
-  padding: 10px 24px;
+.glass-card, .card {
+  background: var(--color-dark-800);
+  border: 1px solid var(--color-dark-700);
   border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 0.875rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.2s;
 }
 
-.btn-primary:hover {
-  background: linear-gradient(135deg, var(--color-primary-400), var(--color-primary-300));
-  box-shadow: 0 0 24px rgba(250, 204, 21, 0.3);
-  transform: translateY(-1px);
+.glass-card:hover, .card:hover {
+  border-color: var(--color-dark-600);
 }
 
-.btn-primary:active {
-  transform: translateY(0);
-}
-
-.btn-secondary {
-  background: var(--color-dark-700);
-  color: var(--color-dark-100);
-  font-weight: 500;
-  padding: 10px 24px;
+/* Minimalistic table layout */
+.table-container {
+  background: var(--color-dark-800);
+  border: 1px solid var(--color-dark-700);
   border-radius: 12px;
-  border: 1px solid var(--color-dark-600);
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 0.875rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  overflow: hidden;
 }
 
-.btn-secondary:hover {
-  background: var(--color-dark-600);
-  border-color: var(--color-dark-500);
-}
-
-.btn-danger {
-  background: var(--color-danger-600);
-  color: white;
-  font-weight: 600;
-  padding: 10px 24px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 0.875rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn-danger:hover {
-  background: var(--color-danger-500);
-  box-shadow: 0 0 24px rgba(239, 68, 68, 0.3);
-}
+/* ============================================ */
+/* Forms & Inputs                               */
+/* ============================================ */
 
 .input-field {
   width: 100%;
-  padding: 12px 16px;
-  background: var(--color-dark-800);
-  border: 1px solid var(--color-dark-600);
-  border-radius: 12px;
+  height: 40px;
+  padding: 0 12px;
+  background: var(--color-dark-950);
+  border: 1px solid var(--color-dark-700);
+  border-radius: 8px;
   color: var(--color-dark-100);
   font-size: 0.875rem;
-  font-family: 'Inter', sans-serif;
-  transition: all 0.25s ease;
+  font-family: inherit;
+  transition: all 0.2s ease;
   outline: none;
 }
 
 .input-field:focus {
   border-color: var(--color-primary-500);
-  box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.1);
+  box-shadow: 0 0 0 1px var(--color-primary-500);
 }
 
 .input-field::placeholder {
-  color: var(--color-dark-400);
+  color: var(--color-dark-500);
+}
+
+textarea.input-field {
+  padding: 12px;
+  resize: vertical;
+  min-height: 80px;
+  height: auto;
+}
+
+/* ============================================ */
+/* Buttons                                      */
+/* ============================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--color-primary-500);
+  color: #000000;
+  font-weight: 600;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:not(:disabled):hover {
+  background: var(--color-primary-400);
+}
+
+.btn-secondary {
+  background: var(--color-dark-800);
+  color: var(--color-dark-100);
+  border: 1px solid var(--color-dark-700);
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:not(:disabled):hover {
+  background: var(--color-dark-700);
+  border-color: var(--color-dark-600);
+}
+
+.btn-danger {
+  background: transparent;
+  color: var(--color-danger-500);
+  border: 1px solid var(--color-dark-700);
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-danger:not(:disabled):hover {
+  background: var(--color-danger-500);
+  color: white;
+  border-color: var(--color-danger-500);
 }
 
 /* ============================================ */
@@ -202,7 +280,7 @@ body {
 /* ============================================ */
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -212,17 +290,12 @@ body {
 }
 
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.95); }
+  from { opacity: 0; transform: scale(0.97); }
   to { opacity: 1; transform: scale(1); }
 }
 
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 8px rgba(250, 204, 21, 0.2); }
-  50% { box-shadow: 0 0 24px rgba(250, 204, 21, 0.4); }
-}
-
 .animate-fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
+  animation: fadeIn 0.3s ease-out forwards;
 }
 
 .animate-slide-left {
@@ -230,12 +303,12 @@ body {
 }
 
 .animate-scale-in {
-  animation: scaleIn 0.3s ease-out forwards;
+  animation: scaleIn 0.2s ease-out forwards;
 }
 
 @keyframes bounceSlow {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+  50% { transform: translateY(-4px); }
 }
 
 .animate-bounce-slow {

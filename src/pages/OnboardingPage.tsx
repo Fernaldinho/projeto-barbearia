@@ -79,7 +79,7 @@ export default function OnboardingPage() {
         <div className="absolute bottom-[10%] right-[10%] w-[300px] h-[300px] bg-blue-500/10 rounded-full blur-[100px]" />
       </div>
 
-      <div className="w-full max-w-md glass-card p-8 relative z-10 slideInLeft">
+      <div className="w-full max-w-md card p-8 relative z-10 slideInLeft">
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-primary/30">
             <Building2 className="w-8 h-8 text-primary" />

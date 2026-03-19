@@ -30,19 +30,19 @@ export function ServicesForm({ initialData, onSubmit, onClose }: ServicesFormPro
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
-      <div className="glass-card w-full max-w-lg p-6 mx-4 animate-scale-in">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-white">
+      <div className="card w-full max-w-lg p-0 mx-4 animate-scale-in flex flex-col overflow-hidden">
+        <div className="flex items-center justify-between p-6 border-b border-dark-800">
+          <h2 className="!mb-0">
             {initialData ? 'Editar Serviço' : 'Novo Serviço'}
           </h2>
-          <button onClick={onClose} className="p-2 rounded-lg text-dark-400 hover:bg-dark-700 hover:text-white transition-all">
+          <button onClick={onClose} className="p-2 -mr-2 rounded-lg text-dark-400 hover:bg-dark-800 hover:text-white transition-all">
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div>
-            <label htmlFor="service-name" className="block text-sm font-medium text-dark-200 mb-2">Nome</label>
+            <label htmlFor="service-name">Nome do Serviço</label>
             <input
               id="service-name"
               type="text"
@@ -55,19 +55,19 @@ export function ServicesForm({ initialData, onSubmit, onClose }: ServicesFormPro
           </div>
 
           <div>
-            <label htmlFor="service-description" className="block text-sm font-medium text-dark-200 mb-2">Descrição</label>
+            <label htmlFor="service-description">Descrição</label>
             <textarea
               id="service-description"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="Descrição do serviço..."
-              className="input-field resize-none h-20"
+              placeholder="Detalhes opcionais do serviço..."
+              className="input-field"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="service-duration" className="block text-sm font-medium text-dark-200 mb-2">Duração (min)</label>
+              <label htmlFor="service-duration">Duração (minutos)</label>
               <input
                 id="service-duration"
                 type="number"
@@ -80,7 +80,7 @@ export function ServicesForm({ initialData, onSubmit, onClose }: ServicesFormPro
               />
             </div>
             <div>
-              <label htmlFor="service-price" className="block text-sm font-medium text-dark-200 mb-2">Preço (R$)</label>
+              <label htmlFor="service-price">Preço (R$)</label>
               <input
                 id="service-price"
                 type="number"
@@ -100,16 +100,19 @@ export function ServicesForm({ initialData, onSubmit, onClose }: ServicesFormPro
               type="checkbox"
               checked={formData.is_active}
               onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-              className="w-4 h-4 rounded accent-primary-500"
+              className="w-4 h-4 rounded appearance-none border border-dark-600 checked:bg-primary-500 checked:border-primary-500 bg-dark-950 transition-colors cursor-pointer"
             />
-            <label htmlFor="service-active" className="text-sm text-dark-200">Serviço ativo</label>
+            <label htmlFor="service-active" className="!mb-0 cursor-pointer text-white font-normal capitalize tracking-normal">
+              Serviço ativo e visível na agenda
+            </label>
           </div>
 
-          <div className="flex gap-3 pt-2">
-            <button type="button" onClick={onClose} className="btn-secondary flex-1 justify-center">
+          {/* Actions group right aligned */}
+          <div className="flex justify-end gap-3 pt-6 mt-2 border-t border-dark-800">
+            <button type="button" onClick={onClose} className="btn-secondary">
               Cancelar
             </button>
-            <button type="submit" disabled={loading} className="btn-primary flex-1 justify-center disabled:opacity-50">
+            <button type="submit" disabled={loading} className="btn-primary">
               {loading ? 'Salvando...' : initialData ? 'Salvar alterações' : 'Criar serviço'}
             </button>
           </div>

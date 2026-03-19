@@ -48,7 +48,7 @@ export function ForgotPasswordPage() {
         </div>
 
         {/* Card */}
-        <div className="glass-card p-8">
+        <div className="card p-8">
           {sent ? (
             <div className="text-center animate-fade-in">
               <div className="w-16 h-16 rounded-full bg-primary-500/10 flex items-center justify-center mx-auto mb-6">

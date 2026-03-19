@@ -205,7 +205,7 @@ export function AppointmentsPage() {
           { label: 'Confirmados', value: appointments.filter((a) => a.status === 'confirmed').length, color: 'text-primary-400' },
           { label: 'Concluídos', value: appointments.filter((a) => a.status === 'completed').length, color: 'text-emerald-400' },
         ].map((stat) => (
-          <div key={stat.label} className="glass-card p-3 text-center">
+          <div key={stat.label} className="card p-3 text-center">
             <p className={`text-xl font-bold ${stat.color}`}>{stat.value}</p>
             <p className="text-xs text-dark-400">{stat.label}</p>
           </div>
@@ -214,7 +214,7 @@ export function AppointmentsPage() {
 
       {/* Content */}
       {loading ? (
-        <div className="glass-card p-8 text-center">
+        <div className="card p-8 text-center">
           <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto" />
         </div>
       ) : viewMode === 'calendar' ? (

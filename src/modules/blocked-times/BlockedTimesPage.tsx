@@ -96,7 +96,7 @@ export function BlockedTimesPage() {
       </div>
 
       {/* Info card */}
-      <div className="glass-card p-4 border-dark-700/30">
+      <div className="card p-4 border-dark-700/30">
         <div className="flex items-start gap-3">
           <div className="w-8 h-8 rounded-lg bg-danger-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
             <CalendarOff className="w-4 h-4 text-danger-400" />
@@ -113,7 +113,7 @@ export function BlockedTimesPage() {
 
       {/* Content */}
       {loading ? (
-        <div className="glass-card p-8 text-center">
+        <div className="card p-8 text-center">
           <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto" />
         </div>
       ) : (

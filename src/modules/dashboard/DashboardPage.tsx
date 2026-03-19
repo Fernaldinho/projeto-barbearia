@@ -141,7 +141,7 @@ export function DashboardPage() {
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="glass-card p-5 h-[120px] animate-pulse">
+            <div key={i} className="card p-5 h-[120px] animate-pulse">
               <div className="w-10 h-10 rounded-xl bg-dark-700 mb-3" />
               <div className="w-20 h-6 rounded bg-dark-700 mb-1" />
               <div className="w-28 h-3 rounded bg-dark-700" />
@@ -156,7 +156,7 @@ export function DashboardPage() {
       {chartsLoading ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {[...Array(2)].map((_, i) => (
-            <div key={i} className="glass-card p-5 h-[300px] animate-pulse">
+            <div key={i} className="card p-5 h-[300px] animate-pulse">
               <div className="w-32 h-5 rounded bg-dark-700 mb-4" />
               <div className="w-full h-[220px] rounded bg-dark-800" />
             </div>
@@ -172,7 +172,7 @@ export function DashboardPage() {
       {/* Bottom Row: Top Services + Today Schedule */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {chartsLoading ? (
-          <div className="glass-card p-5 h-[260px] animate-pulse">
+          <div className="card p-5 h-[260px] animate-pulse">
             <div className="w-32 h-5 rounded bg-dark-700 mb-4" />
             <div className="space-y-3">
               {[...Array(3)].map((_, i) => (
@@ -185,7 +185,7 @@ export function DashboardPage() {
         )}
 
         {loading ? (
-          <div className="glass-card p-5 h-[260px] animate-pulse">
+          <div className="card p-5 h-[260px] animate-pulse">
             <div className="w-32 h-5 rounded bg-dark-700 mb-4" />
             <div className="space-y-2">
               {[...Array(3)].map((_, i) => (

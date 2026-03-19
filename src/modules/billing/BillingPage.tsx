@@ -15,7 +15,7 @@ export function BillingPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div className="glass-card p-6">
+        <div className="card p-6">
           <div className="flex items-start justify-between mb-4">
             <div className="w-11 h-11 rounded-xl bg-success-500/10 flex items-center justify-center">
               <DollarSign className="w-5 h-5 text-success-500" />
@@ -25,7 +25,7 @@ export function BillingPage() {
           <p className="text-sm text-dark-400">Receita do mês</p>
         </div>
 
-        <div className="glass-card p-6">
+        <div className="card p-6">
           <div className="flex items-start justify-between mb-4">
             <div className="w-11 h-11 rounded-xl bg-primary-500/10 flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-primary-400" />
@@ -35,7 +35,7 @@ export function BillingPage() {
           <p className="text-sm text-dark-400">Recebido</p>
         </div>
 
-        <div className="glass-card p-6">
+        <div className="card p-6">
           <div className="flex items-start justify-between mb-4">
             <div className="w-11 h-11 rounded-xl bg-info-500/10 flex items-center justify-center">
               <Clock className="w-5 h-5 text-info-500" />
@@ -47,7 +47,7 @@ export function BillingPage() {
       </div>
 
       {/* Plan Info */}
-      <div className="glass-card p-6">
+      <div className="card p-6">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-xl bg-primary-500/10 flex items-center justify-center">
             <CreditCard className="w-5 h-5 text-primary-400" />
@@ -78,7 +78,7 @@ export function BillingPage() {
       </div>
 
       {/* Invoices placeholder */}
-      <div className="glass-card p-12 text-center">
+      <div className="card p-12 text-center">
         <p className="text-dark-400 text-lg mb-2">Nenhuma fatura encontrada</p>
         <p className="text-dark-500 text-sm">As faturas aparecerão aqui quando houver movimentações financeiras.</p>
       </div>

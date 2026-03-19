@@ -27,7 +27,7 @@ export function SettingsPage() {
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Sidebar Tabs */}
         <div className="lg:w-60 flex-shrink-0">
-          <div className="glass-card p-2 space-y-1">
+          <div className="card p-2 space-y-1">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -48,7 +48,7 @@ export function SettingsPage() {
         {/* Content */}
         <div className="flex-1">
           {activeTab === 'profile' && (
-            <div className="glass-card p-6 space-y-6">
+            <div className="card p-6 space-y-6">
               <h2 className="text-xl font-bold text-white">Perfil</h2>
               <div className="space-y-4">
                 <div>
@@ -76,7 +76,7 @@ export function SettingsPage() {
           )}
 
           {activeTab === 'company' && (
-            <div className="glass-card p-6 space-y-6">
+            <div className="card p-6 space-y-6">
               <h2 className="text-xl font-bold text-white">Empresa</h2>
               <div className="space-y-4">
                 <div>
@@ -97,7 +97,7 @@ export function SettingsPage() {
           )}
 
           {activeTab === 'notifications' && (
-            <div className="glass-card p-6">
+            <div className="card p-6">
               <h2 className="text-xl font-bold text-white mb-6">Notificações</h2>
               <div className="space-y-4">
                 {['Novos agendamentos', 'Cancelamentos', 'Lembretes', 'Relatórios semanais'].map((item) => (
@@ -114,7 +114,7 @@ export function SettingsPage() {
           )}
 
           {activeTab === 'security' && (
-            <div className="glass-card p-6 space-y-6">
+            <div className="card p-6 space-y-6">
               <h2 className="text-xl font-bold text-white">Segurança</h2>
               <div className="space-y-4">
                 <div>
@@ -135,7 +135,7 @@ export function SettingsPage() {
           )}
 
           {activeTab === 'appearance' && (
-            <div className="glass-card p-6">
+            <div className="card p-6">
               <h2 className="text-xl font-bold text-white mb-6">Aparência</h2>
               <p className="text-dark-400 text-sm">Opções de personalização estarão disponíveis em breve.</p>
             </div>

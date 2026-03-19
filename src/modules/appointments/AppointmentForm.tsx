@@ -124,27 +124,26 @@ export function AppointmentForm({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in overflow-y-auto py-8">
-      <div className="glass-card w-full max-w-2xl p-6 mx-4 animate-scale-in">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-white">
+      <div className="card w-full max-w-2xl p-0 mx-4 animate-scale-in flex flex-col overflow-hidden">
+        <div className="flex items-center justify-between p-6 border-b border-dark-800">
+          <h2 className="!mb-0">
             {initialData ? 'Editar Agendamento' : 'Novo Agendamento'}
           </h2>
-          <button onClick={onClose} className="p-2 rounded-lg text-dark-400 hover:bg-dark-700 hover:text-white transition-all">
+          <button onClick={onClose} className="p-2 -mr-2 rounded-lg text-dark-400 hover:bg-dark-800 hover:text-white transition-all">
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {error && (
-          <div className="mb-4 p-3 bg-danger-500/10 border border-danger-500/20 rounded-lg flex items-center gap-2 text-danger-500 text-sm">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
-            <p>{error}</p>
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          {error && (
+            <div className="mb-4 p-3 bg-danger-500/10 border border-danger-500/20 rounded-lg flex items-center gap-2 text-danger-500 text-sm">
+              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+              <p>{error}</p>
+            </div>
+          )}
           {/* Client Selection */}
           <div>
-            <label className="block text-sm font-medium text-dark-200 mb-2">
+            <label>
               <User className="w-4 h-4 inline mr-1.5" />
               Cliente
             </label>
@@ -177,7 +176,7 @@ export function AppointmentForm({
 
           {/* Service Selection */}
           <div>
-            <label className="block text-sm font-medium text-dark-200 mb-2">
+            <label>
               <Scissors className="w-4 h-4 inline mr-1.5" />
               Serviço
             </label>
@@ -204,7 +203,7 @@ export function AppointmentForm({
           {/* Staff Selection */}
           {staffList.length > 0 && (
             <div>
-              <label className="block text-sm font-medium text-dark-200 mb-2">
+              <label>
                 <Users2 className="w-4 h-4 inline mr-1.5" />
                 Profissional
               </label>
@@ -237,7 +236,7 @@ export function AppointmentForm({
 
           {/* Date */}
           <div>
-            <label htmlFor="appt-date" className="block text-sm font-medium text-dark-200 mb-2">Data</label>
+            <label htmlFor="appt-date">Data</label>
             <input id="appt-date" type="date" value={date}
               onChange={(e) => { setDate(e.target.value); setStartTime('') }}
               min={new Date().toISOString().split('T')[0]}
@@ -247,7 +246,7 @@ export function AppointmentForm({
 
           {/* Time Slots */}
           <div>
-            <label className="block text-sm font-medium text-dark-200 mb-2">
+            <label>
               <Clock className="w-4 h-4 inline mr-1.5" />
               Horário disponível
             </label>
@@ -285,7 +284,7 @@ export function AppointmentForm({
 
           {/* Notes */}
           <div>
-            <label htmlFor="appt-notes" className="block text-sm font-medium text-dark-200 mb-2">
+            <label htmlFor="appt-notes">
               Observações (opcional)
             </label>
             <textarea id="appt-notes" value={notes} onChange={(e) => setNotes(e.target.value)}
@@ -326,9 +325,9 @@ export function AppointmentForm({
           )}
 
           {/* Actions */}
-          <div className="flex gap-3 pt-2">
-            <button type="button" onClick={onClose} className="btn-secondary flex-1 justify-center">Cancelar</button>
-            <button type="submit" disabled={loading} className="btn-primary flex-1 justify-center disabled:opacity-50">
+          <div className="flex justify-end gap-3 pt-6 mt-2 border-t border-dark-800">
+            <button type="button" onClick={onClose} className="btn-secondary">Cancelar</button>
+            <button type="submit" disabled={loading} className="btn-primary">
               {loading ? 'Salvando...' : initialData ? 'Salvar alterações' : 'Agendar'}
             </button>
           </div>

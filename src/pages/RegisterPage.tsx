@@ -57,7 +57,7 @@ export function RegisterPage() {
         </div>
 
         {/* Card */}
-        <div className="glass-card p-8">
+        <div className="card p-8">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-white mb-2">Criar sua conta</h1>
             <p className="text-dark-300 text-sm">Comece a gerenciar sua barbearia hoje</p>

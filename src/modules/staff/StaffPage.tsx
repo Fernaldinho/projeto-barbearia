@@ -59,7 +59,7 @@ export function StaffPage() {
       </div>
 
       {/* Info */}
-      <div className="glass-card p-4 border-dark-700/30">
+      <div className="card p-4 border-dark-700/30">
         <div className="flex items-start gap-3">
           <div className="w-8 h-8 rounded-lg bg-info-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
             <Users2 className="w-4 h-4 text-info-500" />
@@ -74,11 +74,11 @@ export function StaffPage() {
       </div>
 
       {loading ? (
-        <div className="glass-card p-8 text-center">
+        <div className="card p-8 text-center">
           <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto" />
         </div>
       ) : staffList.length === 0 ? (
-        <div className="glass-card p-12 text-center">
+        <div className="card p-12 text-center">
           <div className="w-16 h-16 rounded-2xl bg-dark-800 border border-dark-700 flex items-center justify-center mx-auto mb-4">
             <Users2 className="w-8 h-8 text-dark-500" />
           </div>
@@ -88,7 +88,7 @@ export function StaffPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {staffList.map((s) => (
-            <div key={s.id} className={`glass-card p-5 ${!s.active ? 'opacity-50' : ''}`}>
+            <div key={s.id} className={`card p-5 ${!s.active ? 'opacity-50' : ''}`}>
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
                   <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary-500/20 to-primary-700/20 border border-primary-500/10 flex items-center justify-center">

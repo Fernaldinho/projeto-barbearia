@@ -182,7 +182,7 @@ export function LandingPage() {
             {features.map((feature, index) => (
               <div
                 key={feature.title}
-                className="glass-card p-8 hover:border-primary-500/30 transition-all duration-300"
+                className="card p-8 hover:border-primary-500/30 transition-all duration-300"
               >
                 <div className="w-12 h-12 rounded-xl bg-primary-500/10 flex items-center justify-center mb-5">
                   <feature.icon className="w-6 h-6 text-primary-400" />
@@ -198,7 +198,7 @@ export function LandingPage() {
       {/* Demo / CTA Section */}
       <section className="py-20 px-6 relative overflow-hidden">
         <div className="absolute inset-0 bg-primary-500/5" />
-        <div className="max-w-4xl mx-auto text-center relative z-10 glass-card p-12 border-primary-500/20">
+        <div className="max-w-4xl mx-auto text-center relative z-10 card p-12 border-primary-500/20">
           <h2 className="text-3xl font-bold mb-4">Quer ver na prática?</h2>
           <p className="text-dark-300 mb-8 max-w-2xl mx-auto">
             Acesse nosso ambiente de demonstração e explore todas as funcionalidades do sistema como se fosse seu.
@@ -232,7 +232,7 @@ export function LandingPage() {
             {plans.map((plan) => (
               <div
                 key={plan.name}
-                className={`glass-card p-8 flex flex-col transition-transform hover:-translate-y-1 ${
+                className={`card p-8 flex flex-col transition-transform hover:-translate-y-1 ${
                   plan.highlight
                     ? 'border-primary-500/40 shadow-2xl shadow-primary-500/10 relative transform md:-translate-y-4 md:hover:-translate-y-6'
                     : 'border-dark-700/50 hover:border-dark-600'

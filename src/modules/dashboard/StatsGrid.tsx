@@ -36,7 +36,7 @@ function StatsCard({ title, value, icon: Icon, trend, color }: StatsCardProps) {
   const colors = colorMap[color]
 
   return (
-    <div className={cn('glass-card p-6 shadow-lg', colors.glow)}>
+    <div className={cn('card p-6 shadow-lg', colors.glow)}>
       <div className="flex items-start justify-between mb-4">
         <div className={cn('w-11 h-11 rounded-xl flex items-center justify-center', colors.bg)}>
           <Icon className={cn('w-5 h-5', colors.text)} />

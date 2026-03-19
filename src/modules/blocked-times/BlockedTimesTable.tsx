@@ -27,7 +27,7 @@ function isPast(dateStr: string): boolean {
 export function BlockedTimesTable({ blockedTimes, onEdit, onDelete }: BlockedTimesTableProps) {
   if (blockedTimes.length === 0) {
     return (
-      <div className="glass-card p-12 text-center">
+      <div className="card p-12 text-center">
         <div className="w-16 h-16 rounded-2xl bg-dark-800 border border-dark-700 flex items-center justify-center mx-auto mb-4">
           <Calendar className="w-8 h-8 text-dark-500" />
         </div>
@@ -38,7 +38,7 @@ export function BlockedTimesTable({ blockedTimes, onEdit, onDelete }: BlockedTim
   }
 
   return (
-    <div className="glass-card overflow-hidden">
+    <div className="card overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>

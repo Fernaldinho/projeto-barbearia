@@ -19,7 +19,7 @@ export function TopServices({ data }: TopServicesProps) {
   const maxCount = data.length > 0 ? data[0].count : 1
 
   return (
-    <div className="glass-card p-5">
+    <div className="card p-5">
       <div className="flex items-center gap-3 mb-4">
         <div className="w-9 h-9 rounded-xl bg-primary-500/10 flex items-center justify-center">
           <Trophy className="w-4 h-4 text-primary-400" />

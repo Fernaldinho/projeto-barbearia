@@ -51,7 +51,7 @@ export function BlockedTimesForm({ initialData, onSubmit, onClose }: BlockedTime
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
-      <div className="glass-card w-full max-w-lg p-6 mx-4 animate-scale-in">
+      <div className="card w-full max-w-lg p-6 mx-4 animate-scale-in">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-white">
             {initialData ? 'Editar bloqueio' : 'Novo bloqueio'}
