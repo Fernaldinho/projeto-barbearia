@@ -1,36 +1,101 @@
-import { useEffect, useState } from 'react'
-import { StatsGrid } from './StatsGrid'
-import { getDashboardStats } from './dashboard.api'
+import { useEffect, useState, useCallback } from 'react'
 import { useCompany } from '@/contexts/CompanyContext'
 import { useAuth } from '@/contexts/AuthContext'
-import type { DashboardStats } from '@/types'
-import { CalendarCheck, TrendingUp } from 'lucide-react'
+
+import { StatsCards } from './StatsCards'
+import { RevenueChart } from './RevenueChart'
+import { AppointmentsChart } from './AppointmentsChart'
+import { TopServices } from './TopServices'
+import { TodaySchedule } from './TodaySchedule'
+
+import {
+  getDashboardMetrics,
+  getDailyRevenue,
+  getDailyAppointments,
+  getTopServices,
+  getTodaySchedule,
+  type DashboardMetrics,
+  type DailyRevenuePoint,
+  type DailyAppointmentsPoint,
+  type TopServiceItem,
+  type TodayAppointment,
+} from './dashboard.api'
+
+type Period = '7d' | '30d' | 'month'
+
+const periodLabels: Record<Period, string> = {
+  '7d': '7 dias',
+  '30d': '30 dias',
+  'month': 'Mês atual',
+}
 
 export function DashboardPage() {
   const { user } = useAuth()
   const { company } = useCompany()
-  const [stats, setStats] = useState<DashboardStats>({
-    totalClients: 0,
-    totalServices: 0,
-    appointmentsToday: 0,
-    monthlyRevenue: 0,
-  })
-  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    async function load() {
-      if (company?.id) {
-        try {
-          const data = await getDashboardStats(company.id)
-          setStats(data)
-        } catch (err) {
-          console.error('Error loading dashboard stats:', err)
-        }
-      }
+  const [period, setPeriod] = useState<Period>('30d')
+  const [loading, setLoading] = useState(true)
+  const [chartsLoading, setChartsLoading] = useState(false)
+
+  // Data
+  const [metrics, setMetrics] = useState<DashboardMetrics>({
+    appointmentsToday: 0,
+    newClientsThisMonth: 0,
+    monthlyRevenue: 0,
+    attendanceRate: 0,
+    totalAppointmentsMonth: 0,
+    completedAppointmentsMonth: 0,
+  })
+  const [revenueData, setRevenueData] = useState<DailyRevenuePoint[]>([])
+  const [appointmentsData, setAppointmentsData] = useState<DailyAppointmentsPoint[]>([])
+  const [topServicesData, setTopServicesData] = useState<TopServiceItem[]>([])
+  const [todayScheduleData, setTodayScheduleData] = useState<TodayAppointment[]>([])
+
+  // Initial load (metrics + today)
+  const loadInitial = useCallback(async () => {
+    if (!company?.id) return
+    setLoading(true)
+    try {
+      const [m, schedule] = await Promise.all([
+        getDashboardMetrics(company.id),
+        getTodaySchedule(company.id),
+      ])
+      setMetrics(m)
+      setTodayScheduleData(schedule)
+    } catch (err) {
+      console.error('Dashboard load error:', err)
+    } finally {
       setLoading(false)
     }
-    load()
   }, [company?.id])
+
+  // Charts (period-dependent)
+  const loadCharts = useCallback(async () => {
+    if (!company?.id) return
+    setChartsLoading(true)
+    try {
+      const [revenue, appointments, topSvcs] = await Promise.all([
+        getDailyRevenue(company.id, period),
+        getDailyAppointments(company.id, period),
+        getTopServices(company.id, period),
+      ])
+      setRevenueData(revenue)
+      setAppointmentsData(appointments)
+      setTopServicesData(topSvcs)
+    } catch (err) {
+      console.error('Charts load error:', err)
+    } finally {
+      setChartsLoading(false)
+    }
+  }, [company?.id, period])
+
+  useEffect(() => {
+    loadInitial()
+  }, [loadInitial])
+
+  useEffect(() => {
+    loadCharts()
+  }, [loadCharts])
 
   const greeting = () => {
     const hour = new Date().getHours()
@@ -42,57 +107,95 @@ export function DashboardPage() {
   const userName = user?.user_metadata?.full_name || 'Usuário'
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-white mb-2">
-          {greeting()}, {userName.split(' ')[0]}! 👋
-        </h1>
-        <p className="text-dark-300">
-          Aqui está o resumo da sua barbearia hoje.
-        </p>
+    <div className="space-y-6 animate-fade-in">
+      {/* Header + Period Filter */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-white mb-1">
+            {greeting()}, {userName.split(' ')[0]}! 👋
+          </h1>
+          <p className="text-dark-300 text-sm">
+            Aqui está o resumo do seu negócio.
+          </p>
+        </div>
+
+        {/* Period selector */}
+        <div className="flex items-center bg-dark-800 rounded-xl p-1 border border-dark-700">
+          {(Object.keys(periodLabels) as Period[]).map((p) => (
+            <button
+              key={p}
+              onClick={() => setPeriod(p)}
+              className={`px-4 py-2 rounded-lg text-xs font-medium transition-all ${
+                period === p
+                  ? 'bg-primary-500/10 text-primary-400'
+                  : 'text-dark-400 hover:text-white'
+              }`}
+            >
+              {periodLabels[p]}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Stats */}
+      {/* Stats Cards */}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="glass-card p-6 h-[140px] animate-pulse">
-              <div className="w-11 h-11 rounded-xl bg-dark-700 mb-4" />
-              <div className="w-20 h-6 rounded bg-dark-700 mb-2" />
-              <div className="w-28 h-4 rounded bg-dark-700" />
+            <div key={i} className="glass-card p-5 h-[120px] animate-pulse">
+              <div className="w-10 h-10 rounded-xl bg-dark-700 mb-3" />
+              <div className="w-20 h-6 rounded bg-dark-700 mb-1" />
+              <div className="w-28 h-3 rounded bg-dark-700" />
             </div>
           ))}
         </div>
       ) : (
-        <StatsGrid {...stats} />
+        <StatsCards metrics={metrics} />
       )}
 
-      {/* Quick actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="glass-card p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-primary-500/10 flex items-center justify-center">
-              <CalendarCheck className="w-5 h-5 text-primary-400" />
+      {/* Charts Row */}
+      {chartsLoading ? (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {[...Array(2)].map((_, i) => (
+            <div key={i} className="glass-card p-5 h-[300px] animate-pulse">
+              <div className="w-32 h-5 rounded bg-dark-700 mb-4" />
+              <div className="w-full h-[220px] rounded bg-dark-800" />
             </div>
-            <h3 className="text-lg font-semibold text-white">Próximos Agendamentos</h3>
-          </div>
-          <p className="text-dark-400 text-sm">
-            Nenhum agendamento próximo. Configure seus serviços para começar a receber agendamentos.
-          </p>
+          ))}
         </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <RevenueChart data={revenueData} />
+          <AppointmentsChart data={appointmentsData} />
+        </div>
+      )}
 
-        <div className="glass-card p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-success-500/10 flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-success-500" />
+      {/* Bottom Row: Top Services + Today Schedule */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {chartsLoading ? (
+          <div className="glass-card p-5 h-[260px] animate-pulse">
+            <div className="w-32 h-5 rounded bg-dark-700 mb-4" />
+            <div className="space-y-3">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="h-8 rounded bg-dark-800" />
+              ))}
             </div>
-            <h3 className="text-lg font-semibold text-white">Desempenho</h3>
           </div>
-          <p className="text-dark-400 text-sm">
-            Complete seu perfil e adicione serviços para ver estatísticas detalhadas do seu negócio.
-          </p>
-        </div>
+        ) : (
+          <TopServices data={topServicesData} />
+        )}
+
+        {loading ? (
+          <div className="glass-card p-5 h-[260px] animate-pulse">
+            <div className="w-32 h-5 rounded bg-dark-700 mb-4" />
+            <div className="space-y-2">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="h-14 rounded bg-dark-800" />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <TodaySchedule appointments={todayScheduleData} />
+        )}
       </div>
     </div>
   )
