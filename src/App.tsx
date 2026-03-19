@@ -46,6 +46,15 @@ export default function App() {
             border: 1px solid #1a1a1a !important;
             box-shadow: 0 1px 2px rgba(0,0,0,0.2) inset !important;
           }
+          .nav-item:hover {
+            background: #0a0a0a !important;
+            color: #ffffff !important;
+          }
+          .nav-item.active {
+            background: #1a1a1a !important;
+            color: #ffffff !important;
+            border-left: 2px solid #ffffff !important;
+          }
         `}</style>
         <RouterProvider router={router} />
       </CompanyProvider>
