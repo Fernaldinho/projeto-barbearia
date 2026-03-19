@@ -141,7 +141,7 @@ export function AppointmentsPage() {
           <h1 className="text-3xl font-bold text-white">Agendamentos</h1>
           <p className="text-dark-300 mt-1">Visualize e gerencie seus agendamentos</p>
         </div>
-        <button onClick={() => { setPreselectedTime(undefined); setShowForm(true) }} className="btn-primary whitespace-nowrap">
+        <button onClick={() => { setPreselectedTime(undefined); setShowForm(true) }} className="btn-primary w-full sm:w-auto justify-center whitespace-nowrap">
           <Plus className="w-5 h-5" /> Novo Agendamento
         </button>
       </div>

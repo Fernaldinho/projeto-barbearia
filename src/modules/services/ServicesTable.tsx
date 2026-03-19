@@ -46,13 +46,13 @@ export function ServicesTable({ services, onEdit, onDelete }: ServicesTableProps
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <div className="flex items-center gap-2 text-dark-200 text-sm">
+                  <div className="flex items-center gap-2 text-dark-200 text-sm whitespace-nowrap">
                     <Clock className="w-4 h-4 text-dark-500" />
                     {service.duration} min
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <span className="font-semibold text-primary-400 text-sm">{formatCurrency(service.price)}</span>
+                  <span className="font-semibold text-primary-400 text-sm whitespace-nowrap">{formatCurrency(service.price)}</span>
                 </td>
                 <td className="px-6 py-4">
                   <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium ${
@@ -64,20 +64,20 @@ export function ServicesTable({ services, onEdit, onDelete }: ServicesTableProps
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right">
-                  <div className="flex items-center justify-end gap-3">
+                  <div className="flex items-center justify-end gap-2">
                     <button
                       onClick={() => onEdit(service)}
-                      className="text-dark-400 hover:text-white transition-colors flex items-center gap-1.5 text-sm"
+                      className="text-dark-400 hover:text-white transition-colors flex items-center justify-center p-2 rounded-lg hover:bg-dark-700 w-9 h-9"
+                      title="Editar"
                     >
                       <Edit className="w-4 h-4" />
-                      <span className="hidden sm:inline">Editar</span>
                     </button>
                     <button
                       onClick={() => onDelete(service.id)}
-                      className="text-dark-400 hover:text-danger-500 transition-colors flex items-center gap-1.5 text-sm ml-2"
+                      className="text-dark-400 hover:text-danger-500 transition-colors flex items-center justify-center p-2 rounded-lg hover:bg-dark-700 w-9 h-9"
+                      title="Excluir"
                     >
                       <Trash2 className="w-4 h-4" />
-                      <span className="hidden sm:inline">Excluir</span>
                     </button>
                   </div>
                 </td>

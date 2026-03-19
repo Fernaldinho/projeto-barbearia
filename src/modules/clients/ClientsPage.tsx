@@ -74,7 +74,7 @@ export function ClientsPage() {
               placeholder="Buscar cliente..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 bg-dark-800 border border-dark-700 rounded-xl text-white placeholder-dark-400 focus:outline-none focus:border-primary-500 transition-colors w-full sm:w-64"
+              className="input-field pl-10 w-full sm:w-64 !bg-dark-800"
             />
           </div>
           <button onClick={() => setShowForm(true)} className="btn-primary whitespace-nowrap w-full sm:w-auto justify-center">

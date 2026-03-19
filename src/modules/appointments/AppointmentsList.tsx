@@ -37,7 +37,7 @@ export function AppointmentsList({ appointments, onStatusChange, onEdit }: Appoi
           <div
             key={appointment.id}
             className={cn(
-              'card p-5 flex items-center gap-4 transition-all',
+              'card p-4 sm:p-5 flex flex-wrap sm:flex-nowrap items-center gap-4 transition-all',
               !isActive && 'opacity-60'
             )}
           >
@@ -73,7 +73,7 @@ export function AppointmentsList({ appointments, onStatusChange, onEdit }: Appoi
             </div>
 
             {/* Actions */}
-            <div className="flex gap-1.5 flex-shrink-0">
+            <div className="flex gap-1.5 flex-wrap sm:flex-nowrap flex-shrink-0 mt-2 sm:mt-0 ml-auto sm:ml-0 w-full sm:w-auto justify-end sm:justify-start">
               {isActive && (
                 <button
                   onClick={() => onEdit(appointment)}

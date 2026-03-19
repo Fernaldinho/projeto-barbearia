@@ -46,12 +46,12 @@ export function ClientsTable({ clients, onEdit, onDelete }: ClientsTableProps) {
                 </td>
                 <td className="px-6 py-4">
                   <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-sm text-dark-200">
+                    <div className="flex items-center gap-2 text-sm text-dark-200 whitespace-nowrap">
                       <Phone className="w-3.5 h-3.5 text-dark-500" />
                       {client.phone}
                     </div>
                     {client.email && (
-                      <div className="flex items-center gap-2 text-sm text-dark-400">
+                      <div className="flex items-center gap-2 text-sm text-dark-400 whitespace-nowrap">
                         <Mail className="w-3.5 h-3.5 text-dark-500" />
                         {client.email}
                       </div>
@@ -64,20 +64,29 @@ export function ClientsTable({ clients, onEdit, onDelete }: ClientsTableProps) {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right">
-                  <div className="flex items-center justify-end gap-3">
+                  <div className="flex items-center justify-end gap-2">
+                    <a
+                      href={`https://wa.me/${client.phone?.replace(/\\D/g, '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-dark-400 hover:text-success-500 transition-colors flex items-center justify-center p-2 rounded-lg hover:bg-dark-700 w-9 h-9"
+                      title="Chamar no WhatsApp"
+                    >
+                      <Phone className="w-4 h-4" />
+                    </a>
                     <button
                       onClick={() => onEdit(client)}
-                      className="text-dark-400 hover:text-white transition-colors flex items-center gap-1.5 text-sm"
+                      className="text-dark-400 hover:text-white transition-colors flex items-center justify-center p-2 rounded-lg hover:bg-dark-700 w-9 h-9"
+                      title="Editar"
                     >
                       <Edit className="w-4 h-4" />
-                      <span className="hidden sm:inline">Editar</span>
                     </button>
                     <button
                       onClick={() => onDelete(client.id)}
-                      className="text-dark-400 hover:text-danger-500 transition-colors flex items-center gap-1.5 text-sm ml-2"
+                      className="text-dark-400 hover:text-danger-500 transition-colors flex items-center justify-center p-2 rounded-lg hover:bg-dark-700 w-9 h-9"
+                      title="Excluir"
                     >
                       <Trash2 className="w-4 h-4" />
-                      <span className="hidden sm:inline">Excluir</span>
                     </button>
                   </div>
                 </td>
