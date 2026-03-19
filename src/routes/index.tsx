@@ -9,6 +9,7 @@ import { LandingPage } from '@/pages/LandingPage'
 import { LoginPage } from '@/pages/LoginPage'
 import { RegisterPage } from '@/pages/RegisterPage'
 import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage'
+import { BookingPage } from '@/modules/booking/BookingPage'
 
 // Private Module Pages
 import { DashboardPage } from '@/modules/dashboard/DashboardPage'
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
   {
     path: '/forgot-password',
     element: <ForgotPasswordPage />,
+  },
+  {
+    path: '/book/:slug',
+    element: <BookingPage />,
   },
 
   // Private routes (wrapped in ProtectedRoute + DashboardLayout)
