@@ -27,14 +27,14 @@ export function RegisterPage() {
     setLoading(true)
 
     try {
-      const { error } = await register(email, password, name)
-      if (error) {
-        setError('Erro ao criar conta. Tente novamente.')
+      const { error: regError } = await register(email, password, name)
+      if (regError) {
+        setError(regError.message || 'Erro ao criar conta. Tente novamente.')
       } else {
         navigate(ROUTES.DASHBOARD)
       }
-    } catch {
-      setError('Erro ao criar conta. Tente novamente.')
+    } catch (err: any) {
+      setError(err?.message || 'Erro ao criar conta. Tente novamente.')
     } finally {
       setLoading(false)
     }

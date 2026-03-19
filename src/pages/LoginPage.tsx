@@ -20,14 +20,14 @@ export function LoginPage() {
     setLoading(true)
 
     try {
-      const { error } = await login(email, password)
-      if (error) {
-        setError('Email ou senha incorretos. Tente novamente.')
+      const { error: logError } = await login(email, password)
+      if (logError) {
+        setError(logError.message || 'Email ou senha incorretos. Tente novamente.')
       } else {
         navigate(ROUTES.DASHBOARD)
       }
-    } catch {
-      setError('Erro ao fazer login. Tente novamente.')
+    } catch (err: any) {
+      setError(err?.message || 'Erro ao fazer login. Tente novamente.')
     } finally {
       setLoading(false)
     }

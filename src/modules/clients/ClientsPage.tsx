@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Plus } from 'lucide-react'
+import { useEffect, useState, useMemo } from 'react'
+import { Plus, Search } from 'lucide-react'
 import { useCompany } from '@/contexts/CompanyContext'
 import { ClientsTable } from './ClientsTable'
 import { ClientsForm } from './ClientsForm'
@@ -12,6 +12,7 @@ export function ClientsPage() {
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editingClient, setEditingClient] = useState<Client | null>(null)
+  const [searchTerm, setSearchTerm] = useState('')
 
   const loadClients = async () => {
     if (!company?.id) return
@@ -37,8 +38,8 @@ export function ClientsPage() {
   }
 
   const handleUpdate = async (data: ClientFormData) => {
-    if (!editingClient) return
-    await updateClient(editingClient.id, data)
+    if (!editingClient || !company?.id) return
+    await updateClient(company.id, editingClient.id, data)
     setEditingClient(null)
     await loadClients()
   }
@@ -49,17 +50,38 @@ export function ClientsPage() {
     await loadClients()
   }
 
+  const filteredClients = useMemo(() => {
+    if (!searchTerm) return clients
+    const lower = searchTerm.toLowerCase()
+    return clients.filter(c => 
+      c.name.toLowerCase().includes(lower) || 
+      (c.phone && c.phone.replace(/\D/g, '').includes(searchTerm.replace(/\D/g, '')))
+    )
+  }, [clients, searchTerm])
+
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-white">Clientes</h1>
           <p className="text-dark-300 mt-1">Gerencie sua base de clientes</p>
         </div>
-        <button onClick={() => setShowForm(true)} className="btn-primary">
-          <Plus className="w-5 h-5" />
-          Novo Cliente
-        </button>
+        <div className="flex flex-col sm:flex-row items-center gap-3">
+          <div className="relative w-full sm:w-auto">
+            <Search className="w-5 h-5 text-dark-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Buscar cliente..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 pr-4 py-2 bg-dark-800 border border-dark-700 rounded-xl text-white placeholder-dark-400 focus:outline-none focus:border-primary-500 transition-colors w-full sm:w-64"
+            />
+          </div>
+          <button onClick={() => setShowForm(true)} className="btn-primary whitespace-nowrap w-full sm:w-auto justify-center">
+            <Plus className="w-5 h-5" />
+            Novo Cliente
+          </button>
+        </div>
       </div>
 
       {loading ? (
@@ -67,7 +89,7 @@ export function ClientsPage() {
           <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto" />
         </div>
       ) : (
-        <ClientsTable clients={clients} onEdit={(c) => setEditingClient(c)} onDelete={handleDelete} />
+        <ClientsTable clients={filteredClients} onEdit={(c) => setEditingClient(c)} onDelete={handleDelete} />
       )}
 
       {showForm && <ClientsForm onSubmit={handleCreate} onClose={() => setShowForm(false)} />}

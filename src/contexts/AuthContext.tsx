@@ -41,6 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) console.error('Supabase Login Error:', error)
     return { error: error as Error | null }
   }
 
@@ -52,6 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         data: { full_name: name },
       },
     })
+    if (error) console.error('Supabase Register Error:', error)
     return { error: error as Error | null }
   }
 

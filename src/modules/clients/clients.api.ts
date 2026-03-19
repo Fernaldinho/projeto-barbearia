@@ -23,7 +23,28 @@ export async function getClientById(id: string): Promise<Client | null> {
   return data
 }
 
+export async function checkDuplicatePhone(companyId: string, phone: string, excludeId?: string): Promise<boolean> {
+  if (!phone) return false;
+  
+  let query = supabase
+    .from('clients')
+    .select('id')
+    .eq('company_id', companyId)
+    .eq('phone', phone)
+    
+  if (excludeId) {
+    query = query.neq('id', excludeId)
+  }
+
+  const { data, error } = await query
+  if (error) throw error
+  return data && data.length > 0
+}
+
 export async function createClient(companyId: string, formData: ClientFormData): Promise<Client> {
+  const isDuplicate = await checkDuplicatePhone(companyId, formData.phone)
+  if (isDuplicate) throw new Error('Já existe um cliente com este telefone nesta empresa.')
+
   const { data, error } = await supabase
     .from('clients')
     .insert({ ...formData, company_id: companyId })
@@ -34,7 +55,12 @@ export async function createClient(companyId: string, formData: ClientFormData):
   return data
 }
 
-export async function updateClient(id: string, formData: Partial<ClientFormData>): Promise<Client> {
+export async function updateClient(companyId: string, id: string, formData: Partial<ClientFormData>): Promise<Client> {
+  if (formData.phone) {
+    const isDuplicate = await checkDuplicatePhone(companyId, formData.phone, id)
+    if (isDuplicate) throw new Error('Já existe um cliente com este telefone nesta empresa.')
+  }
+
   const { data, error } = await supabase
     .from('clients')
     .update({ ...formData, updated_at: new Date().toISOString() })

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { ClientFormData, Client } from '@/types'
-import { X } from 'lucide-react'
+import { X, AlertCircle } from 'lucide-react'
+import { formatPhone } from '@/utils/helpers'
 
 interface ClientsFormProps {
   initialData?: Client | null
@@ -12,16 +13,30 @@ export function ClientsForm({ initialData, onSubmit, onClose }: ClientsFormProps
   const [formData, setFormData] = useState<ClientFormData>({
     name: initialData?.name || '',
     email: initialData?.email || '',
-    phone: initialData?.phone || '',
+    phone: initialData?.phone ? formatPhone(initialData.phone) : '',
     notes: initialData?.notes || '',
   })
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError(null)
+    
+    if (formData.phone) {
+      const digits = formData.phone.replace(/\D/g, '')
+      if (digits.length < 10) {
+        setError('Telefone inválido. Informe um número válido.')
+        return
+      }
+    }
+
     setLoading(true)
     try {
       await onSubmit(formData)
+    } catch (err: any) {
+      console.error(err)
+      setError(err.message || 'Ocorreu um erro ao salvar o cliente.')
     } finally {
       setLoading(false)
     }
@@ -39,6 +54,13 @@ export function ClientsForm({ initialData, onSubmit, onClose }: ClientsFormProps
           </button>
         </div>
 
+        {error && (
+          <div className="mb-4 p-3 bg-danger-500/10 border border-danger-500/20 rounded-lg flex items-center gap-2 text-danger-500 text-sm">
+            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            <p>{error}</p>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label htmlFor="client-name" className="block text-sm font-medium text-dark-200 mb-2">Nome</label>
@@ -47,7 +69,7 @@ export function ClientsForm({ initialData, onSubmit, onClose }: ClientsFormProps
 
           <div>
             <label htmlFor="client-phone" className="block text-sm font-medium text-dark-200 mb-2">Telefone</label>
-            <input id="client-phone" type="tel" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} placeholder="(00) 00000-0000" className="input-field" required />
+            <input id="client-phone" type="tel" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: formatPhone(e.target.value) })} placeholder="(00) 00000-0000" className="input-field" required />
           </div>
 
           <div>
