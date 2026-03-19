@@ -73,10 +73,10 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050510] flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: '#121212' }}>
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[10%] left-[10%] w-[400px] h-[400px] bg-primary/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[10%] right-[10%] w-[300px] h-[300px] bg-blue-500/10 rounded-full blur-[100px]" />
+        <div className="absolute top-[10%] left-[10%] w-[400px] h-[400px] rounded-full blur-[120px]" style={{ backgroundColor: 'rgba(231, 176, 8, 0.05)' }} />
+        <div className="absolute bottom-[10%] right-[10%] w-[300px] h-[300px] rounded-full blur-[100px]" style={{ backgroundColor: 'rgba(231, 176, 8, 0.03)' }} />
       </div>
 
       <div className="w-full max-w-md card p-8 relative z-10 slideInLeft">
