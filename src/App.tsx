@@ -47,9 +47,6 @@ export default function App() {
             box-shadow: 0 1px 2px rgba(0,0,0,0.2) inset !important;
           }
         `}</style>
-        <div style={{ position: 'fixed', top: 0, right: 0, backgroundColor: '#10b981', color: 'white', padding: '4px 12px', zIndex: 9999, fontSize: '12px', fontWeight: 'bold', borderBottomLeftRadius: '8px' }}>
-          UI UPDATED: SUCCESS (LINEAR THEME)
-        </div>
         <RouterProvider router={router} />
       </CompanyProvider>
     </AuthProvider>

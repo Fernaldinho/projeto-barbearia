@@ -60,10 +60,6 @@ export function Navbar({ onMenuClick }: NavbarProps) {
           </div>
         </div>
       </div>
-      {/* TEST INDICATOR FOR THE USER */}
-      <div className="fixed bottom-4 right-4 bg-red-600 text-white p-4 z-50 rounded-lg text-lg font-bold shadow-2xl">
-        UI UPDATED
-      </div>
     </header>
   )
 }
