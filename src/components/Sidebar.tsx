@@ -5,6 +5,7 @@ import {
   Users,
   CalendarCheck,
   Clock,
+  CalendarOff,
   Settings,
   CreditCard,
   LogOut,
@@ -20,6 +21,7 @@ const navItems = [
   { path: ROUTES.CLIENTS, label: 'Clientes', icon: Users },
   { path: ROUTES.APPOINTMENTS, label: 'Agendamentos', icon: CalendarCheck },
   { path: ROUTES.BUSINESS_HOURS, label: 'Horários', icon: Clock },
+  { path: ROUTES.BLOCKED_TIMES, label: 'Bloqueios', icon: CalendarOff },
   { path: ROUTES.BILLING, label: 'Faturamento', icon: CreditCard },
   { path: ROUTES.SETTINGS, label: 'Configurações', icon: Settings },
 ]

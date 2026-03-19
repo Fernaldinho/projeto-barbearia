@@ -17,6 +17,7 @@ import { ServicesPage } from '@/modules/services/ServicesPage'
 import { ClientsPage } from '@/modules/clients/ClientsPage'
 import { AppointmentsPage } from '@/modules/appointments/AppointmentsPage'
 import { BusinessHoursPage } from '@/modules/business-hours/BusinessHoursPage'
+import { BlockedTimesPage } from '@/modules/blocked-times/BlockedTimesPage'
 import { BillingPage } from '@/modules/billing/BillingPage'
 import { SettingsPage } from '@/modules/settings/SettingsPage'
 
@@ -70,6 +71,10 @@ export const router = createBrowserRouter([
       {
         path: '/business-hours',
         element: <BusinessHoursPage />,
+      },
+      {
+        path: '/blocked-times',
+        element: <BlockedTimesPage />,
       },
       {
         path: '/billing',
