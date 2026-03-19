@@ -27,8 +27,8 @@ export function Navbar({ onMenuClick }: NavbarProps) {
   const pageTitle = routeTitles[location.pathname] || 'Dashboard'
 
   return (
-    <header className="fixed top-0 right-0 z-30 h-[64px] bg-dark-950/80 backdrop-blur-lg border-b border-dark-800 left-0 md:left-[260px] transition-all">
-      <div className="flex items-center justify-between h-full px-4 sm:px-6">
+    <header className="fixed top-0 right-0 z-30 h-[64px] bg-dark-950/80 backdrop-blur-lg border-b border-dark-800 left-0 md:left-[240px] transition-all">
+      <div className="flex items-center justify-between h-full px-[24px]">
         
         {/* Left side: Mobile Hamburger + Title */}
         <div className="flex items-center gap-4 flex-1">
@@ -39,21 +39,20 @@ export function Navbar({ onMenuClick }: NavbarProps) {
             <Menu className="w-5 h-5" />
           </button>
           
-          <h1 className="text-lg font-semibold text-white hidden sm:block !mb-0">{pageTitle}</h1>
-          <h1 className="text-base font-semibold text-white sm:hidden !mb-0">{pageTitle}</h1>
+          <h2 className="!mb-0 whitespace-nowrap">{pageTitle}</h2>
         </div>
 
         {/* Right side: Actions & User Info */}
-        <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+        <div className="flex items-center gap-[16px] shrink-0">
           <button className="relative p-2 rounded-lg text-dark-400 hover:bg-dark-800 hover:text-white transition-all">
             <Bell className="w-5 h-5" />
             <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-primary-500 rounded-full" />
           </button>
 
-          <div className="flex items-center gap-3 pl-3 sm:pl-4 border-l border-dark-800">
-            <div className="hidden sm:block text-right">
-              <p className="text-sm font-medium text-white leading-none mb-1">{userName}</p>
-              <p className="text-xs text-dark-400 leading-none">Admin</p>
+          <div className="flex items-center gap-[8px] pl-[16px] border-l border-dark-800">
+            <div className="hidden sm:block text-right mr-2">
+              <p className="text-small font-medium text-white mb-0.5">{userName}</p>
+              <p className="text-[10px] text-dark-400 leading-none">Admin</p>
             </div>
             <div className="w-8 h-8 rounded-lg bg-dark-800 border border-dark-700 flex items-center justify-center">
               <span className="text-xs font-semibold text-primary-400">{getInitials(userName)}</span>

@@ -16,23 +16,15 @@ interface TodayScheduleProps {
 
 export function TodaySchedule({ appointments }: TodayScheduleProps) {
   return (
-    <div className="card p-5">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-9 h-9 rounded-xl bg-primary-500/10 flex items-center justify-center">
-          <CalendarCheck className="w-4 h-4 text-primary-400" />
-        </div>
-        <div>
-          <h3 className="font-semibold text-white text-sm">Agenda de hoje</h3>
-          <p className="text-xs text-dark-400">{appointments.length} agendamento{appointments.length !== 1 ? 's' : ''}</p>
-        </div>
-      </div>
+    <div className="card p-[24px]">
+      <h3 className="!mb-[16px]">Agenda de hoje</h3>
 
       {appointments.length === 0 ? (
         <div className="text-center py-6 text-dark-500 text-sm">
           Nenhum agendamento hoje
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-[8px]">
           {appointments.map((appt) => {
             const status = statusConfig[appt.status] || statusConfig.scheduled
             const StatusIcon = status.icon

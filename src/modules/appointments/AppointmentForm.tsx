@@ -124,7 +124,7 @@ export function AppointmentForm({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in overflow-y-auto py-8">
-      <div className="card w-full max-w-2xl p-0 mx-4 animate-scale-in flex flex-col overflow-hidden">
+      <div className="card w-full max-w-[500px] p-0 mx-4 animate-scale-in flex flex-col overflow-hidden">
         <div className="flex items-center justify-between p-6 border-b border-dark-800">
           <h2 className="!mb-0">
             {initialData ? 'Editar Agendamento' : 'Novo Agendamento'}

@@ -25,18 +25,8 @@ export function AppointmentsChart({ data }: AppointmentsChartProps) {
   const totalAppts = data.reduce((sum, d) => sum + d.total, 0)
 
   return (
-    <div className="card p-5">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-info-500/10 flex items-center justify-center">
-            <CalendarCheck className="w-4 h-4 text-info-500" />
-          </div>
-          <div>
-            <h3 className="font-semibold text-white text-sm">Agendamentos por dia</h3>
-            <p className="text-xs text-dark-400">Total no período: {totalAppts}</p>
-          </div>
-        </div>
-      </div>
+    <div className="card p-[24px]">
+      <h3 className="!mb-[16px]">Agendamentos por dia</h3>
 
       <div className="h-[220px]">
         {data.length === 0 ? (

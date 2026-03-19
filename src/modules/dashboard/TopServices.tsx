@@ -19,23 +19,14 @@ export function TopServices({ data }: TopServicesProps) {
   const maxCount = data.length > 0 ? data[0].count : 1
 
   return (
-    <div className="card p-5">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-9 h-9 rounded-xl bg-primary-500/10 flex items-center justify-center">
-          <Trophy className="w-4 h-4 text-primary-400" />
-        </div>
-        <div>
-          <h3 className="font-semibold text-white text-sm">Top serviços</h3>
-          <p className="text-xs text-dark-400">Por número de agendamentos</p>
-        </div>
-      </div>
-
+    <div className="card p-[24px]">
+      <h3 className="!mb-[16px]">Serviços mais populares</h3>
       {data.length === 0 ? (
         <div className="text-center py-6 text-dark-500 text-sm">
           Nenhum serviço concluído no período
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-[16px]">
           {data.map((item, i) => {
             const barWidth = Math.max((item.count / maxCount) * 100, 8)
 

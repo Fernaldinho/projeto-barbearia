@@ -22,18 +22,8 @@ export function RevenueChart({ data }: RevenueChartProps) {
   const totalRevenue = data.reduce((sum, d) => sum + d.revenue, 0)
 
   return (
-    <div className="card p-5">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-success-500/10 flex items-center justify-center">
-            <DollarSign className="w-4 h-4 text-success-500" />
-          </div>
-          <div>
-            <h3 className="font-semibold text-white text-sm">Faturamento diário</h3>
-            <p className="text-xs text-dark-400">Total: {formatter.format(totalRevenue)}</p>
-          </div>
-        </div>
-      </div>
+    <div className="card p-[24px]">
+      <h3 className="!mb-[16px]">Faturamento diário</h3>
 
       <div className="h-[220px]">
         {data.length === 0 ? (

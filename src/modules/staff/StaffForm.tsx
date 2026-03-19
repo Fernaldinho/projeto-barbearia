@@ -30,7 +30,7 @@ export function StaffForm({ initialData, onSubmit, onClose }: StaffFormProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
-      <div className="card w-full max-w-md p-0 flex flex-col overflow-hidden mx-4 animate-scale-in">
+      <div className="card w-full max-w-[500px] p-0 flex flex-col overflow-hidden mx-4 animate-scale-in">
         <div className="flex items-center justify-between p-6 border-b border-dark-800">
           <h2 className="!mb-0">
             {initialData ? 'Editar Profissional' : 'Novo Profissional'}
