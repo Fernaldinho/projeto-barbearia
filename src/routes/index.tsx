@@ -17,6 +17,7 @@ import OnboardingPage from '@/pages/OnboardingPage'
 import { ServicesPage } from '@/modules/services/ServicesPage'
 import { ClientsPage } from '@/modules/clients/ClientsPage'
 import { AppointmentsPage } from '@/modules/appointments/AppointmentsPage'
+import { StaffPage } from '@/modules/staff/StaffPage'
 import { BusinessHoursPage } from '@/modules/business-hours/BusinessHoursPage'
 import { BlockedTimesPage } from '@/modules/blocked-times/BlockedTimesPage'
 import { BillingPage } from '@/modules/billing/BillingPage'
@@ -72,6 +73,10 @@ export const router = createBrowserRouter([
       {
         path: '/appointments',
         element: <AppointmentsPage />,
+      },
+      {
+        path: '/staff',
+        element: <StaffPage />,
       },
       {
         path: '/business-hours',

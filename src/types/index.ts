@@ -82,6 +82,25 @@ export interface ClientFormData {
 }
 
 // ============================================
+// Staff Types
+// ============================================
+export interface Staff {
+  id: string
+  company_id: string
+  name: string
+  role: string | null
+  avatar_url: string | null
+  active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface StaffFormData {
+  name: string
+  role: string
+}
+
+// ============================================
 // Appointment Types
 // ============================================
 export interface Appointment {
@@ -89,6 +108,7 @@ export interface Appointment {
   company_id: string
   client_id: string
   service_id: string
+  staff_id: string | null
   date: string
   start_time: string
   end_time: string
@@ -99,6 +119,7 @@ export interface Appointment {
   // Relations
   client?: Client
   service?: Service
+  staff?: Staff
 }
 
 export type AppointmentStatus = 'scheduled' | 'confirmed' | 'completed' | 'cancelled' | 'no_show'
@@ -106,6 +127,7 @@ export type AppointmentStatus = 'scheduled' | 'confirmed' | 'completed' | 'cance
 export interface AppointmentFormData {
   client_id: string
   service_id: string
+  staff_id: string
   date: string
   start_time: string
   notes: string
@@ -133,6 +155,7 @@ export type InvoiceStatus = 'pending' | 'paid' | 'overdue' | 'cancelled'
 export interface BusinessHours {
   id: string
   company_id: string
+  staff_id: string | null
   weekday: number // 0-6
   start_time: string
   end_time: string

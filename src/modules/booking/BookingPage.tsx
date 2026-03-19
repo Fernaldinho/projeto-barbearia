@@ -3,19 +3,21 @@ import { useParams } from 'react-router-dom'
 import { Loader2, ArrowLeft, Sparkles } from 'lucide-react'
 
 import { getCompanyBySlug, getActiveServices, findOrCreateClient, createPublicBooking } from './booking.api'
+import { getActiveStaff } from '@/modules/staff/staff.api'
 import { getAvailableSlots } from '@/lib/availability'
-import type { Company, Service } from '@/types'
+import type { Company, Service, Staff } from '@/types'
 import type { TimeSlot } from '@/lib/availability'
 
 import { ServiceSelector } from './ServiceSelector'
+import { StaffSelector } from './StaffSelector'
 import { DateSelector } from './DateSelector'
 import { TimeSelector } from './TimeSelector'
 import { ClientForm } from './ClientForm'
 import { ConfirmationScreen } from './ConfirmationScreen'
 
-type BookingStep = 'service' | 'date' | 'time' | 'client' | 'confirmation'
+type BookingStep = 'service' | 'staff' | 'date' | 'time' | 'client' | 'confirmation'
 
-const STEP_ORDER: BookingStep[] = ['service', 'date', 'time', 'client', 'confirmation']
+const STEP_ORDER: BookingStep[] = ['service', 'staff', 'date', 'time', 'client', 'confirmation']
 
 export function BookingPage() {
   const { slug } = useParams<{ slug: string }>()
@@ -23,11 +25,14 @@ export function BookingPage() {
   // Data
   const [company, setCompany] = useState<Company | null>(null)
   const [services, setServices] = useState<Service[]>([])
+  const [staffList, setStaffList] = useState<Staff[]>([])
   const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>([])
   const [isDayClosed, setIsDayClosed] = useState(false)
 
   // Selection state
   const [selectedService, setSelectedService] = useState<Service | null>(null)
+  const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null)
+  const [staffSelected, setStaffSelected] = useState(false) // tracks if user made a choice (even "any")
   const [selectedDate, setSelectedDate] = useState('')
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
   const [clientName, setClientName] = useState('')
@@ -40,7 +45,10 @@ export function BookingPage() {
   const [error, setError] = useState<string | null>(null)
   const [notFound, setNotFound] = useState(false)
 
-  // Load company + services
+  // Determine actual step order based on staff availability
+  const hasStaff = staffList.length > 0
+  const activeSteps = hasStaff ? STEP_ORDER : STEP_ORDER.filter((s) => s !== 'staff')
+
   useEffect(() => {
     if (!slug) return
     loadCompany()
@@ -55,8 +63,12 @@ export function BookingPage() {
         return
       }
       setCompany(comp)
-      const svcs = await getActiveServices(comp.id)
+      const [svcs, staff] = await Promise.all([
+        getActiveServices(comp.id),
+        getActiveStaff(comp.id),
+      ])
       setServices(svcs)
+      setStaffList(staff)
     } catch (err) {
       console.error('Error loading company:', err)
       setNotFound(true)
@@ -65,12 +77,14 @@ export function BookingPage() {
     }
   }
 
-  // Load time slots when date or service changes
   const loadSlots = useCallback(async () => {
     if (!company?.id || !selectedService || !selectedDate) return
     setSlotsLoading(true)
     try {
-      const result = await getAvailableSlots(company.id, selectedDate, selectedService.id)
+      const result = await getAvailableSlots(
+        company.id, selectedDate, selectedService.id,
+        selectedStaff?.id
+      )
       setIsDayClosed(!result.is_open)
       setAvailableSlots(result.slots)
     } catch (err) {
@@ -79,33 +93,33 @@ export function BookingPage() {
     } finally {
       setSlotsLoading(false)
     }
-  }, [company?.id, selectedService?.id, selectedDate])
+  }, [company?.id, selectedService?.id, selectedDate, selectedStaff?.id])
 
   useEffect(() => {
-    if (step === 'time') {
-      loadSlots()
-    }
+    if (step === 'time') loadSlots()
   }, [step, loadSlots])
 
-  // Step navigation
-  const currentStepIndex = STEP_ORDER.indexOf(step)
+  // Step navigation using the active steps array
+  const currentStepIndex = activeSteps.indexOf(step)
 
   const goBack = () => {
-    if (currentStepIndex > 0) {
-      setStep(STEP_ORDER[currentStepIndex - 1])
-    }
+    if (currentStepIndex > 0) setStep(activeSteps[currentStepIndex - 1])
   }
-
   const goNext = () => {
-    if (currentStepIndex < STEP_ORDER.length - 1) {
-      setStep(STEP_ORDER[currentStepIndex + 1])
-    }
+    if (currentStepIndex < activeSteps.length - 1) setStep(activeSteps[currentStepIndex + 1])
   }
 
   // Handlers
   const handleServiceSelect = (service: Service) => {
     setSelectedService(service)
-    setSelectedTime(null) // reset time when service changes
+    setSelectedTime(null)
+    goNext()
+  }
+
+  const handleStaffSelect = (staff: Staff | null) => {
+    setSelectedStaff(staff)
+    setStaffSelected(true)
+    setSelectedTime(null)
     goNext()
   }
 
@@ -129,12 +143,8 @@ export function BookingPage() {
     try {
       const clientId = await findOrCreateClient(company.id, data.name, data.phone, data.email)
       await createPublicBooking(
-        company.id,
-        clientId,
-        selectedService.id,
-        selectedDate,
-        selectedTime,
-        selectedService.duration
+        company.id, clientId, selectedService.id, selectedDate,
+        selectedTime, selectedService.duration, selectedStaff?.id
       )
       setClientName(data.name)
       setStep('confirmation')
@@ -175,6 +185,8 @@ export function BookingPage() {
     )
   }
 
+  const stepsWithoutConfirmation = activeSteps.filter((s) => s !== 'confirmation')
+
   return (
     <div className="min-h-screen bg-gray-950">
       {/* Header */}
@@ -201,9 +213,9 @@ export function BookingPage() {
       {step !== 'confirmation' && (
         <div className="max-w-lg mx-auto px-4 pt-4">
           <div className="flex items-center gap-1">
-            {STEP_ORDER.slice(0, -1).map((s, i) => (
+            {stepsWithoutConfirmation.map((_, i) => (
               <div
-                key={s}
+                key={i}
                 className={`h-1 flex-1 rounded-full transition-all duration-500 ${
                   i <= currentStepIndex ? 'bg-amber-500' : 'bg-gray-800'
                 }`}
@@ -211,7 +223,7 @@ export function BookingPage() {
             ))}
           </div>
           <p className="text-xs text-gray-500 mt-2 text-center">
-            Passo {currentStepIndex + 1} de {STEP_ORDER.length - 1}
+            Passo {currentStepIndex + 1} de {stepsWithoutConfirmation.length}
           </p>
         </div>
       )}
@@ -219,48 +231,35 @@ export function BookingPage() {
       {/* Content */}
       <main className="max-w-lg mx-auto px-4 py-6">
         {step === 'service' && (
-          <ServiceSelector
-            services={services}
-            selectedId={selectedService?.id || null}
-            onSelect={handleServiceSelect}
-          />
+          <ServiceSelector services={services} selectedId={selectedService?.id || null} onSelect={handleServiceSelect} />
+        )}
+
+        {step === 'staff' && (
+          <StaffSelector staff={staffList} selectedId={staffSelected ? (selectedStaff?.id || null) : undefined as any} onSelect={handleStaffSelect} />
         )}
 
         {step === 'date' && (
-          <DateSelector
-            selectedDate={selectedDate}
-            onSelect={handleDateSelect}
-          />
+          <DateSelector selectedDate={selectedDate} onSelect={handleDateSelect} />
         )}
 
         {step === 'time' && (
-          <TimeSelector
-            slots={availableSlots}
-            selectedTime={selectedTime}
-            loading={slotsLoading}
-            isDayClosed={isDayClosed}
-            onSelect={handleTimeSelect}
-          />
+          <TimeSelector slots={availableSlots} selectedTime={selectedTime} loading={slotsLoading} isDayClosed={isDayClosed} onSelect={handleTimeSelect} />
         )}
 
         {step === 'client' && (
           <>
-            {/* Summary strip */}
             <div className="mb-6 p-3 bg-gray-800/50 border border-gray-700/50 rounded-xl">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-gray-400">
-                  {selectedService?.name} · {new Date(selectedDate + 'T12:00:00').toLocaleDateString('pt-BR')} · {selectedTime}
+                  {selectedService?.name}
+                  {selectedStaff ? ` · ${selectedStaff.name}` : ''}
+                  {' · '}{new Date(selectedDate + 'T12:00:00').toLocaleDateString('pt-BR')}
+                  {' · '}{selectedTime}
                 </span>
-                <button onClick={() => setStep('service')} className="text-amber-400 hover:text-amber-300 font-medium">
-                  Alterar
-                </button>
+                <button onClick={() => setStep('service')} className="text-amber-400 hover:text-amber-300 font-medium">Alterar</button>
               </div>
             </div>
-            <ClientForm
-              onSubmit={handleClientSubmit}
-              loading={bookingLoading}
-              error={error}
-            />
+            <ClientForm onSubmit={handleClientSubmit} loading={bookingLoading} error={error} />
           </>
         )}
 
@@ -272,11 +271,11 @@ export function BookingPage() {
             date={selectedDate}
             startTime={selectedTime || ''}
             clientName={clientName}
+            staffName={selectedStaff?.name}
           />
         )}
       </main>
 
-      {/* Footer */}
       <footer className="max-w-lg mx-auto px-4 py-6 text-center">
         <p className="text-xs text-gray-600">
           Powered by <span className="font-semibold text-gray-500">BarberPro</span>

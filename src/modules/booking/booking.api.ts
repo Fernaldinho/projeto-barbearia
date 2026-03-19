@@ -63,12 +63,13 @@ export async function createPublicBooking(
   serviceId: string,
   date: string,
   startTime: string,
-  serviceDuration: number
+  serviceDuration: number,
+  staffId?: string
 ): Promise<{ id: string }> {
   const endTime = minutesToTime(timeToMinutes(startTime) + serviceDuration)
 
   // Final availability check right before booking
-  const available = await isSlotAvailable(companyId, date, startTime, endTime)
+  const available = await isSlotAvailable(companyId, date, startTime, endTime, staffId)
   if (!available) {
     throw new Error('Este horário não está mais disponível. Por favor, selecione outro horário.')
   }
@@ -79,6 +80,7 @@ export async function createPublicBooking(
       company_id: companyId,
       client_id: clientId,
       service_id: serviceId,
+      staff_id: staffId || null,
       date,
       start_time: startTime,
       end_time: endTime,

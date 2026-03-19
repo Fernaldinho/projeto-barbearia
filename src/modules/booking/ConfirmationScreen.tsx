@@ -1,4 +1,4 @@
-import { CheckCircle2, Calendar, Clock, Scissors, MapPin } from 'lucide-react'
+import { CheckCircle2, Calendar, Clock, Scissors, MapPin, Users2 } from 'lucide-react'
 
 interface ConfirmationScreenProps {
   companyName: string
@@ -7,6 +7,7 @@ interface ConfirmationScreenProps {
   date: string
   startTime: string
   clientName: string
+  staffName?: string
 }
 
 export function ConfirmationScreen({
@@ -16,6 +17,7 @@ export function ConfirmationScreen({
   date,
   startTime,
   clientName,
+  staffName,
 }: ConfirmationScreenProps) {
   const formatDate = (d: string) => {
     const dateObj = new Date(d + 'T12:00:00')
@@ -75,6 +77,18 @@ export function ConfirmationScreen({
             <p className="text-sm font-medium text-white">{startTime}</p>
           </div>
         </div>
+
+        {staffName && (
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+              <Users2 className="w-4 h-4 text-amber-400" />
+            </div>
+            <div>
+              <p className="text-xs text-gray-500">Profissional</p>
+              <p className="text-sm font-medium text-white">{staffName}</p>
+            </div>
+          </div>
+        )}
 
         {companyAddress && (
           <div className="flex items-center gap-3">

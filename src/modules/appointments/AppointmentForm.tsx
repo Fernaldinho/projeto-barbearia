@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
-import { X, AlertCircle, Search, Clock, User, Scissors, Loader2 } from 'lucide-react'
-import type { Appointment, AppointmentFormData, Client, Service } from '@/types'
+import { X, AlertCircle, Search, Clock, User, Scissors, Loader2, Users2 } from 'lucide-react'
+import type { Appointment, AppointmentFormData, Client, Service, Staff } from '@/types'
 import type { TimeSlot } from '@/lib/availability'
 import { getAvailableSlots } from '@/lib/availability'
 import { getClients } from '@/modules/clients/clients.api'
 import { getServices } from '@/modules/services/services.api'
+import { getActiveStaff } from '@/modules/staff/staff.api'
 import { useCompany } from '@/contexts/CompanyContext'
 import { formatCurrency } from '@/utils/helpers'
 
@@ -12,6 +13,7 @@ interface AppointmentFormProps {
   initialData?: Appointment | null
   preselectedDate?: string
   preselectedTime?: string
+  preselectedStaffId?: string
   onSubmit: (data: AppointmentFormData, serviceDuration: number) => Promise<void>
   onClose: () => void
 }
@@ -20,6 +22,7 @@ export function AppointmentForm({
   initialData,
   preselectedDate,
   preselectedTime,
+  preselectedStaffId,
   onSubmit,
   onClose,
 }: AppointmentFormProps) {
@@ -28,6 +31,7 @@ export function AppointmentForm({
   // Form state
   const [clientId, setClientId] = useState(initialData?.client_id || '')
   const [serviceId, setServiceId] = useState(initialData?.service_id || '')
+  const [staffId, setStaffId] = useState(initialData?.staff_id || preselectedStaffId || '')
   const [date, setDate] = useState(initialData?.date || preselectedDate || new Date().toISOString().split('T')[0])
   const [startTime, setStartTime] = useState(initialData?.start_time?.slice(0, 5) || preselectedTime || '')
   const [notes, setNotes] = useState(initialData?.notes || '')
@@ -35,6 +39,7 @@ export function AppointmentForm({
   // Data state
   const [clients, setClients] = useState<Client[]>([])
   const [services, setServices] = useState<Service[]>([])
+  const [staffList, setStaffList] = useState<Staff[]>([])
   const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>([])
   const [isDayClosed, setIsDayClosed] = useState(false)
 
@@ -44,18 +49,23 @@ export function AppointmentForm({
   const [error, setError] = useState<string | null>(null)
   const [clientSearch, setClientSearch] = useState('')
 
-  // Load clients + services on mount
+  // Load clients + services + staff on mount
   useEffect(() => {
     if (!company?.id) return
-    Promise.all([getClients(company.id), getServices(company.id)])
-      .then(([c, s]) => {
+    Promise.all([
+      getClients(company.id),
+      getServices(company.id),
+      getActiveStaff(company.id),
+    ])
+      .then(([c, s, st]) => {
         setClients(c)
         setServices(s.filter((svc) => svc.is_active))
+        setStaffList(st)
       })
       .catch((err) => console.error('Error loading data:', err))
   }, [company?.id])
 
-  // Load available slots when date or service changes
+  // Load available slots when date, service, or staff changes
   const loadSlots = useCallback(async () => {
     if (!company?.id || !serviceId || !date) {
       setAvailableSlots([])
@@ -63,29 +73,23 @@ export function AppointmentForm({
     }
     setLoadingSlots(true)
     try {
-      const result = await getAvailableSlots(company.id, date, serviceId)
+      const result = await getAvailableSlots(company.id, date, serviceId, staffId || undefined)
       setIsDayClosed(!result.is_open)
       setAvailableSlots(result.slots)
-
-      // If editing and the current start_time is not in available slots, keep it
-      if (initialData && startTime && !result.slots.find((s) => s.start_time === startTime)) {
-        // keep the current value for editing
-      } else if (!startTime && result.slots.length > 0) {
-        // auto-select first available slot if none selected
-      }
     } catch (err) {
       console.error('Error loading slots:', err)
       setAvailableSlots([])
     } finally {
       setLoadingSlots(false)
     }
-  }, [company?.id, serviceId, date])
+  }, [company?.id, serviceId, date, staffId])
 
   useEffect(() => {
     loadSlots()
   }, [loadSlots])
 
   const selectedService = services.find((s) => s.id === serviceId)
+  const selectedStaff = staffList.find((s) => s.id === staffId)
 
   const filteredClients = clientSearch
     ? clients.filter(
@@ -99,27 +103,15 @@ export function AppointmentForm({
     e.preventDefault()
     setError(null)
 
-    if (!clientId) {
-      setError('Selecione um cliente.')
-      return
-    }
-    if (!serviceId) {
-      setError('Selecione um serviço.')
-      return
-    }
-    if (!date) {
-      setError('Selecione uma data.')
-      return
-    }
-    if (!startTime) {
-      setError('Selecione um horário.')
-      return
-    }
+    if (!clientId) { setError('Selecione um cliente.'); return }
+    if (!serviceId) { setError('Selecione um serviço.'); return }
+    if (!date) { setError('Selecione uma data.'); return }
+    if (!startTime) { setError('Selecione um horário.'); return }
 
     setLoading(true)
     try {
       await onSubmit(
-        { client_id: clientId, service_id: serviceId, date, start_time: startTime, notes },
+        { client_id: clientId, service_id: serviceId, staff_id: staffId, date, start_time: startTime, notes },
         selectedService?.duration || 30
       )
     } catch (err: any) {
@@ -159,10 +151,8 @@ export function AppointmentForm({
             <div className="relative mb-2">
               <Search className="w-4 h-4 text-dark-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
-                type="text"
-                placeholder="Buscar cliente..."
-                value={clientSearch}
-                onChange={(e) => setClientSearch(e.target.value)}
+                type="text" placeholder="Buscar cliente..."
+                value={clientSearch} onChange={(e) => setClientSearch(e.target.value)}
                 className="pl-9 pr-4 py-2 bg-dark-800 border border-dark-700 rounded-lg text-white placeholder-dark-400 focus:outline-none focus:border-primary-500 transition-colors w-full text-sm"
               />
             </div>
@@ -171,14 +161,10 @@ export function AppointmentForm({
                 <p className="text-xs text-dark-500 text-center py-2">Nenhum cliente encontrado</p>
               ) : (
                 filteredClients.map((c) => (
-                  <button
-                    key={c.id}
-                    type="button"
-                    onClick={() => { setClientId(c.id); setClientSearch(''); }}
+                  <button key={c.id} type="button"
+                    onClick={() => { setClientId(c.id); setClientSearch('') }}
                     className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
-                      clientId === c.id
-                        ? 'bg-primary-500/10 text-primary-400 font-medium'
-                        : 'text-dark-200 hover:bg-dark-700'
+                      clientId === c.id ? 'bg-primary-500/10 text-primary-400 font-medium' : 'text-dark-200 hover:bg-dark-700'
                     }`}
                   >
                     <span className="font-medium">{c.name}</span>
@@ -197,19 +183,15 @@ export function AppointmentForm({
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {services.map((svc) => (
-                <button
-                  key={svc.id}
-                  type="button"
-                  onClick={() => { setServiceId(svc.id); setStartTime(''); }}
+                <button key={svc.id} type="button"
+                  onClick={() => { setServiceId(svc.id); setStartTime('') }}
                   className={`text-left p-3 rounded-xl border transition-all ${
                     serviceId === svc.id
                       ? 'border-primary-500/30 bg-primary-500/10 shadow-lg shadow-primary-500/5'
                       : 'border-dark-700 bg-dark-800 hover:border-dark-600'
                   }`}
                 >
-                  <p className={`font-medium text-sm ${serviceId === svc.id ? 'text-primary-400' : 'text-white'}`}>
-                    {svc.name}
-                  </p>
+                  <p className={`font-medium text-sm ${serviceId === svc.id ? 'text-primary-400' : 'text-white'}`}>{svc.name}</p>
                   <div className="flex items-center gap-3 mt-1">
                     <span className="text-xs text-dark-400">{svc.duration}min</span>
                     <span className="text-xs text-primary-400 font-medium">{formatCurrency(svc.price)}</span>
@@ -219,19 +201,47 @@ export function AppointmentForm({
             </div>
           </div>
 
+          {/* Staff Selection */}
+          {staffList.length > 0 && (
+            <div>
+              <label className="block text-sm font-medium text-dark-200 mb-2">
+                <Users2 className="w-4 h-4 inline mr-1.5" />
+                Profissional
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                <button type="button"
+                  onClick={() => { setStaffId(''); setStartTime('') }}
+                  className={`text-left p-3 rounded-xl border transition-all ${
+                    !staffId ? 'border-primary-500/30 bg-primary-500/10' : 'border-dark-700 bg-dark-800 hover:border-dark-600'
+                  }`}
+                >
+                  <p className={`font-medium text-sm ${!staffId ? 'text-primary-400' : 'text-white'}`}>Qualquer</p>
+                  <p className="text-xs text-dark-400 mt-0.5">Sem preferência</p>
+                </button>
+                {staffList.map((s) => (
+                  <button key={s.id} type="button"
+                    onClick={() => { setStaffId(s.id); setStartTime('') }}
+                    className={`text-left p-3 rounded-xl border transition-all ${
+                      staffId === s.id
+                        ? 'border-primary-500/30 bg-primary-500/10'
+                        : 'border-dark-700 bg-dark-800 hover:border-dark-600'
+                    }`}
+                  >
+                    <p className={`font-medium text-sm ${staffId === s.id ? 'text-primary-400' : 'text-white'}`}>{s.name}</p>
+                    {s.role && <p className="text-xs text-dark-400 mt-0.5">{s.role}</p>}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Date */}
           <div>
-            <label htmlFor="appt-date" className="block text-sm font-medium text-dark-200 mb-2">
-              Data
-            </label>
-            <input
-              id="appt-date"
-              type="date"
-              value={date}
-              onChange={(e) => { setDate(e.target.value); setStartTime(''); }}
+            <label htmlFor="appt-date" className="block text-sm font-medium text-dark-200 mb-2">Data</label>
+            <input id="appt-date" type="date" value={date}
+              onChange={(e) => { setDate(e.target.value); setStartTime('') }}
               min={new Date().toISOString().split('T')[0]}
-              className="input-field [color-scheme:dark]"
-              required
+              className="input-field [color-scheme:dark]" required
             />
           </div>
 
@@ -241,13 +251,11 @@ export function AppointmentForm({
               <Clock className="w-4 h-4 inline mr-1.5" />
               Horário disponível
             </label>
-
             {!serviceId ? (
               <p className="text-xs text-dark-500 italic">Selecione um serviço para ver os horários.</p>
             ) : loadingSlots ? (
               <div className="flex items-center gap-2 text-dark-400 text-sm py-4">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Carregando horários...
+                <Loader2 className="w-4 h-4 animate-spin" /> Carregando horários...
               </div>
             ) : isDayClosed ? (
               <div className="p-4 bg-dark-800 border border-dark-700 rounded-xl text-center">
@@ -260,9 +268,7 @@ export function AppointmentForm({
             ) : (
               <div className="grid grid-cols-4 sm:grid-cols-6 gap-2 max-h-40 overflow-y-auto">
                 {availableSlots.map((slot) => (
-                  <button
-                    key={slot.start_time}
-                    type="button"
+                  <button key={slot.start_time} type="button"
                     onClick={() => setStartTime(slot.start_time)}
                     className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                       startTime === slot.start_time
@@ -282,10 +288,7 @@ export function AppointmentForm({
             <label htmlFor="appt-notes" className="block text-sm font-medium text-dark-200 mb-2">
               Observações (opcional)
             </label>
-            <textarea
-              id="appt-notes"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
+            <textarea id="appt-notes" value={notes} onChange={(e) => setNotes(e.target.value)}
               placeholder="Observações sobre o agendamento..."
               className="input-field resize-none h-16"
             />
@@ -304,11 +307,15 @@ export function AppointmentForm({
                   <span className="text-dark-400">Serviço: </span>
                   <span className="text-white">{selectedService.name}</span>
                 </div>
+                {selectedStaff && (
+                  <div>
+                    <span className="text-dark-400">Profissional: </span>
+                    <span className="text-white">{selectedStaff.name}</span>
+                  </div>
+                )}
                 <div>
                   <span className="text-dark-400">Data: </span>
-                  <span className="text-white">
-                    {new Date(date + 'T12:00:00').toLocaleDateString('pt-BR')}
-                  </span>
+                  <span className="text-white">{new Date(date + 'T12:00:00').toLocaleDateString('pt-BR')}</span>
                 </div>
                 <div>
                   <span className="text-dark-400">Horário: </span>
@@ -320,9 +327,7 @@ export function AppointmentForm({
 
           {/* Actions */}
           <div className="flex gap-3 pt-2">
-            <button type="button" onClick={onClose} className="btn-secondary flex-1 justify-center">
-              Cancelar
-            </button>
+            <button type="button" onClick={onClose} className="btn-secondary flex-1 justify-center">Cancelar</button>
             <button type="submit" disabled={loading} className="btn-primary flex-1 justify-center disabled:opacity-50">
               {loading ? 'Salvando...' : initialData ? 'Salvar alterações' : 'Agendar'}
             </button>
