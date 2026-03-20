@@ -46,6 +46,16 @@ export const router = createBrowserRouter([
     element: <BookingPage />,
   },
 
+  // Onboarding (standalone, no sidebar)
+  {
+    path: '/onboarding',
+    element: (
+      <ProtectedRoute>
+        <OnboardingPage />
+      </ProtectedRoute>
+    ),
+  },
+
   // Private routes (wrapped in ProtectedRoute + DashboardLayout)
   {
     element: (
@@ -57,10 +67,6 @@ export const router = createBrowserRouter([
       {
         path: '/dashboard',
         element: <DashboardPage />,
-      },
-      {
-        path: '/onboarding',
-        element: <OnboardingPage />,
       },
       {
         path: '/services',

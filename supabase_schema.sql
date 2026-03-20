@@ -131,8 +131,19 @@ CREATE POLICY "Users can view their own company" ON companies
 CREATE POLICY "Owners can update their company" ON companies 
   FOR UPDATE USING (id = get_my_company());
 
+-- Allow authenticated users to create a company (needed for onboarding)
+CREATE POLICY "Authenticated users can create companies" ON companies
+  FOR INSERT TO authenticated
+  WITH CHECK (true);
+
 -- Multi-tenant isolation policies (Users only see data from their company)
 CREATE POLICY "Tenant access: users" ON users FOR ALL USING (company_id = get_my_company());
+
+-- Allow authenticated users to create their own user profile (needed for onboarding)
+CREATE POLICY "Users can create their own profile" ON users
+  FOR INSERT TO authenticated
+  WITH CHECK (id = auth.uid());
+
 CREATE POLICY "Tenant access: services" ON services FOR ALL USING (company_id = get_my_company());
 CREATE POLICY "Tenant access: clients" ON clients FOR ALL USING (company_id = get_my_company());
 CREATE POLICY "Tenant access: appointments" ON appointments FOR ALL USING (company_id = get_my_company());
